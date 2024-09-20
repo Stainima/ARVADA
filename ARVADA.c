@@ -7,6 +7,11 @@ int main (int argc, char **argv){
         printf("Not enough command line arguments passed in");
     }
     
+    // establishing the root node
+    node *root = {
+        .parent = NULL;
+    }
+
     // Getting the name of the file
     char *file_name = *(argv + 1);
     printf("filename = %s", file_name);
@@ -15,10 +20,14 @@ int main (int argc, char **argv){
     FILE *file_ptr;
     file_ptr = fopen(file_name, "r");
 
-    // Somehere to store the content
+    // SomeWhere to store the content
     char line[12];
+    
+    /* redading the whole code line
     char *line_ptr = fgets(line, sizeof(line) , file_ptr);
     printf("Here is the contents of the file: %s", line);
+    */
+    
     
     // closing the file
     fclose(file_ptr);
