@@ -8,9 +8,12 @@ int main (int argc, char **argv){
     }
     
     // establishing the root node
-    node *root = {
-        .parent = NULL;
-    }
+    Node root = {
+        .character = NULL,
+        .order_num = 0,
+        .num_child = 0,
+        .parent = NULL,
+    };
 
     // Getting the name of the file
     char *file_name = *(argv + 1);
