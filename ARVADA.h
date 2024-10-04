@@ -14,7 +14,7 @@
     - Array of children
 */
 typedef struct node{
-    char *character;
+    char character;
     int order_num;
     struct node *parent;
     int num_child;

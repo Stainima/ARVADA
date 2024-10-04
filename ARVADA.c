@@ -1,5 +1,6 @@
 #include "ARVADA.h"
 
+
 int main (int argc, char **argv){
 
     // Argument check 
@@ -8,12 +9,27 @@ int main (int argc, char **argv){
     }
     
     // establishing the root node
-    Node root = {
-        .character = NULL,
-        .order_num = 0,
-        .num_child = 0,
-        .parent = NULL,
-    };
+    // Mallocing space for the node
+    Node *root = malloc(sizeof(Node));
+
+
+    /*
+    Node sturcture for reference
+    typedef struct node{
+        char character;
+        int order_num;
+        struct node *parent;
+        int num_child;
+        struct node **children;
+    } Node ;
+    */
+    
+    // Initialising the root nodes.
+    root->character = NULL;
+    root->order_num = 0;
+    root->parent = NULL;
+    root->num_child = 0;
+    root->children = NULL;
 
     // Getting the name of the file
     char *file_name = *(argv + 1);
@@ -23,16 +39,34 @@ int main (int argc, char **argv){
     FILE *file_ptr;
     file_ptr = fopen(file_name, "r");
 
-    // SomeWhere to store the content
-    char line[12];
+    // Space for all the children node pointer.
+    // Caping at 80 to represent good coding practices of 80 characters per line
+    root->children = calloc(80, sizeof(Node*));
     
-    /* redading the whole code line
-    char *line_ptr = fgets(line, sizeof(line) , file_ptr);
-    printf("Here is the contents of the file: %s", line);
-    */
-    
-    
+    // Reading in the file characters 1 by 1 and inttializing the root tree.
+    char c;
+    Node **curr_ptr;
+    while((c = fgetc(file_name)) != EOF){
+        
+        Node *curr_node = mallco(sizeof(Node));
+        curr_node->character = c;
+        curr_node->parent = root;
+        curr_node->order_num = root->num_child + 1;
+
+        curr_ptr = root->children + root->num_child;
+        *curr_ptr = curr_node;
+        root->num_child ++;
+    }
+
     // closing the file
     fclose(file_ptr);
+    
+    // freeing all thge malloced space
+    while(root->num_child > 0){
+        free(root->children + root->num_child - 1);
+        root->num_child --;
+    }
+    free(root->children);
+    free(root);
     return 0;
 }
