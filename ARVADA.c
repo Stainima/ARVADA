@@ -1,5 +1,35 @@
 #include "ARVADA.h"
 
+// This will bubble up a subtree, and return the head of the new subtree.
+Node* bubble( Node *parent_node, int start, int end){
+    
+    // Ensuring a valid range
+    if( start>= end || start < 0 || end > parent_node->num_child){
+        printf("Invalid bubble range\n");
+    }
+    
+    // Creating the parent bubble.
+    Node *bubble_node = malloc(sizeof(Node));
+    bubble_node->parent = parent_node;
+    bubble_node->num_child = end - start;
+
+    // For now, no creation of new nodes. Just creation for bubble_node. (mane need to refactor)
+    for (int i = start; i < end; i++){
+        parent_node->children[i]->parent = bubble_node; // updating all the childrens parents
+        bubble_node->children[i - start] = parent_node->children[i]; // updating the bubble node to refer to it new children.
+    }
+
+}
+
+// If the bubble is a failure, this function will undo the bubble and revert the bubble.
+void bubble_pop(Node *parent_node){
+
+}
+
+// 
+int prase_bubble(Node *parent_node){
+
+}
 
 int main (int argc, char **argv){
 
@@ -25,7 +55,6 @@ int main (int argc, char **argv){
     */
     
     // Initialising the root nodes.
-    root->character = NULL;
     root->order_num = 0;
     root->parent = NULL;
     root->num_child = 0;
@@ -41,14 +70,14 @@ int main (int argc, char **argv){
 
     // Space for all the children node pointer.
     // Caping at 80 to represent good coding practices of 80 characters per line
-    root->children = calloc(80, sizeof(Node*));
+    root->children = calloc(80, sizeof(Node*)); // note: may need to be changed later. (memcpy)
     
     // Reading in the file characters 1 by 1 and inttializing the root tree.
     char c;
     Node **curr_ptr;
-    while((c = fgetc(file_name)) != EOF){
+    while((c = fgetc(file_ptr)) != EOF){
         
-        Node *curr_node = mallco(sizeof(Node));
+        Node *curr_node = malloc(sizeof(Node));
         curr_node->character = c;
         curr_node->parent = root;
         curr_node->order_num = root->num_child + 1;

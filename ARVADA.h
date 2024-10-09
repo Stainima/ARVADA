@@ -21,4 +21,14 @@ typedef struct node{
     struct node **children;
 } Node ;
 
+/*
+    A struct to keep track of all nodes ever produced in code
+    - count: number of total node
+    - nodes: a array of node pointers
+*/
+typedef struct all_nodes{
+    int count;
+    struct node **nodes;
+} All_nodes
+
 #endif
