@@ -23,12 +23,14 @@ typedef struct node{
 
 /*
     A struct to keep track of all nodes ever produced in code
+    - capicity: number of node pointer it can accomodate for now
     - count: number of total node
     - nodes: a array of node pointers
 */
 typedef struct all_nodes{
+    int capicity;
     int count;
     struct node **nodes;
-} All_nodes
+} All_nodes;
 
 #endif
