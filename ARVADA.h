@@ -19,7 +19,7 @@ typedef struct node{
     struct node *parent;
     int num_child;
     struct node **children;
-} Node ;
+} Node;
 
 /*
     A struct to keep track of all nodes ever produced in code
@@ -32,5 +32,5 @@ typedef struct all_nodes{
     int count;
     struct node **nodes;
 } All_nodes;
-
+        
 #endif

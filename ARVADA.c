@@ -1,39 +1,5 @@
 #include "ARVADA.h"
 
-// This will bubble up a subtree, and return the head of the new subtree.
-Node* bubble( Node *parent_node, int start, int end){
-    
-    // Ensuring a valid range
-    if( start>= end || start < 0 || end > parent_node->num_child){
-        printf("Invalid bubble range\n");
-    }
-    
-    // Creating the parent bubble.
-    Node *bubble_node = malloc(sizeof(Node));
-    bubble_node->parent = parent_node;
-    bubble_node->num_child = end - start;
-
-    // For now, no creation of new nodes. Just creation for bubble_node. (mane need to refactor)
-    for (int i = start; i < end; i++){
-        parent_node->children[i]->parent = bubble_node; // updating all the childrens parents
-        bubble_node->children[i - start] = parent_node->children[i]; // updating the bubble node to refer to it new children.
-    }
-
-    return NULL;
-
-}
-
-// If the bubble is a failure, this function will undo the bubble and revert the bubble.
-void bubble_pop(Node *parent_node){
-
-}
-
-// 
-int prase_bubble(Node *parent_node){
-
-    return 1;
-}
-
 // if the node_master starts overflowing
 void check_master(All_nodes* node_master){
     if(node_master->count == node_master->capicity){
@@ -44,6 +10,46 @@ void check_master(All_nodes* node_master){
         node_master->nodes = new_ptr;
     }
 }
+
+// This will bubble up a subtree, and return the head of the new subtree.
+Node* bubble( Node *parent_node, int start, int end, All_nodes *node_master){
+    
+    // Ensuring a valid range
+    if( start>= end || start < 0 || end > parent_node->num_child){
+        printf("Invalid bubble range\n");
+    }
+    
+    // Creating the parent bubble.
+    Node *bubble_node = malloc(sizeof(Node));
+    bubble_node->parent = parent_node;
+    bubble_node->num_child = end - start;
+    
+    // adding to node master
+    check_master(node_master);
+    node_master->nodes[node_master->count] = bubble_node;
+    node_master->count++;
+
+    // For now, no creation of new nodes. Just creation for bubble_node. (may need to refactor)
+    for (int i = start; i < end; i++){
+        parent_node->children[i]->parent = bubble_node; // updating all the childrens parents
+        bubble_node->children[i - start] = parent_node->children[i]; // updating the bubble node to refer to it new children.
+    }
+    printf("Bubbled nodes from index %d to %d\n", start, end);
+    return bubble_node;
+}
+
+// If the bubble is a failure, this function will undo the bubble and revert the bubble.
+void bubble_pop(Node *parent_nodem, All_nodes *node_master){
+
+}
+
+// Now to praise the bubble
+int prase_bubble(Node *parent_node){
+
+    return 1;
+}
+
+// if the bubble is a success, do some refactoring
 
 int main (int argc, char **argv){
 
