@@ -13,21 +13,62 @@ void check_master(All_nodes* node_master){
      }
 }
 
+// This will bubble up a subtree, and return the head of the new subtree.
+// Refernce to section 3A of the ARVADA paper (bubbling)
+Node* bubble( Node *parent_node, int start, int end, All_nodes *node_master){
+    
+    // Ensuring a valid range
+    if( start>= end || start < 0 || end > parent_node->num_child){
+        printf("Invalid bubble range\n");
+    }
+    
+    // Creating the parent bubble.
+    Node *bubble_node = malloc(sizeof(Node));
+    bubble_node->parent = parent_node;
+    bubble_node->num_child = end - start;
+    
+    // adding to node master
+    check_master(node_master);
+    node_master->nodes[node_master->count] = bubble_node;
+    node_master->count++;
+
+    // For now, no creation of new nodes. Just creation for bubble_node. (may need to refactor)
+    for (int i = start; i < end; i++){
+        parent_node->children[i]->parent = bubble_node; // updating all the childrens parents
+        bubble_node->children[i - start] = parent_node->children[i]; // updating the bubble node to refer to it new children.
+    }
+    printf("Bubbled nodes from index %d to %d\n", start, end);
+    return bubble_node;
+}
+
+// If the bubble is a failure, this function will undo the bubble and revert the bubble.
+void bubble_pop(Node *parent_nodem, All_nodes *node_master){
+    
+    
+}
+
+// Now to praise the bubble
+int prase_bubble(Node *parent_node){
+
+    return 1;
+}
+
+// if the bubble is a success, do some refactoring
 
 int main (int argc, char **argv){
 
-    // Argument check
+    // Argument check 
     if ( argc < 2){
         printf("Not enough command line arguments passed in");
         return EXIT_FAILURE;
     }
-
+    
     // Mallocing space for all node struct
     All_nodes *node_master = malloc(sizeof(All_nodes));
     node_master->capacity = 80; // Setting initial capicity as 80
     node_master->count = 0; // Initiall no nodes, so coutn = 0
     node_master->nodes = calloc(node_master->count,sizeof(Node*)); // mallocing space for 80 nodes
-
+    
     // establishing the root node
     // Mallocing space for the node
     Node *root = malloc(sizeof(Node));
@@ -44,7 +85,7 @@ int main (int argc, char **argv){
         struct node **children;
     } Node ;
     */
-
+    
     // Initialising the root nodes.
     root->order_num = 1;
     root->parent = NULL;
@@ -54,7 +95,7 @@ int main (int argc, char **argv){
     // Getting the name of the file
     char *file_name = *(argv + 1);
     printf("filename = %s\n", file_name);
-
+    
     // Opening the file in read mode
     FILE *file_ptr;
     file_ptr = fopen(file_name, "r");
@@ -75,13 +116,13 @@ int main (int argc, char **argv){
         fprintf(stderr, "Memory allocation failed for current node\n");
         fclose(file_ptr);
         return EXIT_FAILURE;
-    }
+    } 
     // Reading in the file characters 1 by 1 and inttializing the root tree.
     // Reference: section 3A main Algorithm -> building the naive flat tree.
     char c ;
     printf("Performing part 1: building the naive tree.\n");
     while((c = fgetc(file_ptr)) != EOF){
-
+        
         // setting up the new node
         Node *curr_node = calloc(1,sizeof(Node));
         curr_node->character = c;
