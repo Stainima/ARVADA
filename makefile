@@ -1,9 +1,9 @@
+CC := gcc
+arvada: ARVADA.o
+	$(CC) ARVADA.o -o arvada
 
-arvada: ARVADA.o 
-	gcc ARVADA.o -o arvada
-
-ARVADA.o: ARVADA.c ARVADA.h 
-	gcc -c ARVADA.c 
+ARVADA.o: ARVADA.c ARVADA.h
+	$(CC) -c ARVADA.c
 
 clean:
 	rm arvada ARVADA.o
