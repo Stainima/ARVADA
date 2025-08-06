@@ -35,15 +35,6 @@ int main (int argc, char **argv){
     node_master->count++; // Incrementing count
 
     /*
-    Node sturcture for reference
-    typedef struct node{
-        char character;
-        int order_num;
-        struct node *parent;
-        int num_child;
-        struct node **children;
-    } Node ;
-    */
 
     // Initialising the root nodes.
     root->order_num = 1;
