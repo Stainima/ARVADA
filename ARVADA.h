@@ -36,4 +36,8 @@ typedef struct nodes{
     struct node **nodes;
 } Nodes;
 
+void print_all_trees(Nodes *nodes);
+void check_node_capicity(Node *node);
+void check_nodes_capicity(Nodes *nodes);
+
 #endif

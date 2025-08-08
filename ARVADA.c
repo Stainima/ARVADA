@@ -24,9 +24,9 @@ int main (int argc, char **argv){
      // Keeping track of all root nodes
      // (so each sentence in the sample file)
      Nodes *root_nodes = malloc(sizeof(Nodes)); // freed
-     root_nodes->capacity = 80; // randomly assigned
+     root_nodes->capacity = 10; // randomly assigned
      root_nodes->count = 0;
-     root_nodes->nodes = calloc(root_nodes->count, sizeof(Node*)); // freed
+     root_nodes->nodes = calloc(root_nodes->capacity, sizeof(Node*)); // freed
 
      // Getting the file name and reading it in
      char *file_name = *(argv + 1);
@@ -56,10 +56,12 @@ int main (int argc, char **argv){
          current_root->parent = NULL;
          current_root->terminal = 0;
          current_root->num_child = 0;
-         current_root->children = calloc(current_root->capicity, sizeof(Node*));
+         //current_root->children = calloc(current_root->capicity, sizeof(Node*));
 
-         for(int i = 0; i < read_line_len; i ++ ){
-             printf("%c\n", current_line[i]);
+         /*
+          *
+         for(int i = 0; i < (read_line_len - 1); i ++ ){
+             //printf("%c\n", current_line[i]);
              Node * node = malloc(sizeof(Node));
              node->parent = current_root;
              node->capicity = 0;
@@ -71,9 +73,13 @@ int main (int argc, char **argv){
              current_root->num_child ++;
 
          }
+          */
 
+         //Check current capicity of the root nodes
+         check_nodes_capicity(root_nodes);
          root_nodes->nodes[root_nodes->count] = current_root;
          root_nodes->count ++;
+         print_all_trees(root_nodes);
 
      }
 
@@ -88,10 +94,11 @@ int main (int argc, char **argv){
      for( int i = 0; i < root_nodes-> count; i ++){
 
          Node *cur_node = root_nodes->nodes[i];
-         for( int j = 0; j < cur_node->num_child ; j ++){
-             free(cur_node->children[j]);
-         }
+         //for( int j = 0; j < cur_node->num_child ; j ++){
+             //free(cur_node->children[j]);
+             //}
          free(cur_node);
+         printf("here %d\n", i);
      }
      free(root_nodes->nodes);
      free(root_nodes);
