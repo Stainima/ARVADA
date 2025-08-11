@@ -1,15 +1,15 @@
 CC := gcc
 Cflags := -fsanitize=address
 
-debug.out: ARVADA.o ARVADA_helper.o
-	$(CC) ARVADA_helper.o ARVADA.o -o arvada
+arvada: ARVADA.o ARVADA_helper.o
+	$(CC) $(Cflags) ARVADA_helper.o ARVADA.o -o arvada.out
 
-arvada.out: ARVADA.o ARVADA_helper.o
-	$(CC) $(Cflags) ARVADA_helper.o ARVADA.o -o arvada
+debug: ARVADA.o ARVADA_helper.o
+	$(CC) ARVADA_helper.o ARVADA.o -o arvada.out
 
 ARVADA.o: ARVADA.c ARVADA.h ARVADA_helper.c
 	$(CC) -c ARVADA.c
 
 
 clean:
-	rm arvada ARVADA.o ARVADA_helper.o
+	rm arvada.out ARVADA.o ARVADA_helper.o
