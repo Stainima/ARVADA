@@ -1,2 +1,2 @@
 # ARVADA
-ReImplementation of ARVADA
+ReImplementation of ARVADA in C
