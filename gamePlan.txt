@@ -1,0 +1,52 @@
+######### Learning Highly Recursive Input Grammar Summary #########
+I) Introduction
+II) Walkthrough
+III) Technique
+    A) Main Algorithm
+    B) Ordering bubbles for exploration
+    C) Accepting Bubbles
+    D) Sampling Strings for Replacement Checks
+IV) Evaluation
+    A) BenchMarks
+    B) Accuracy Evaluation
+    C) Comparison to Deep Learning Approaches
+    D) Performance Analysis
+    E) Qualitative Analysis of Mined Grammars
+V) Dicussion and Threats to Validity
+VI) Related Works
+VII) Conclusion
+###################################################################
+
+Initial impressions
+- The algorithm is very memory intensive
+
+Technique exploration
+
+
+
+
+###################################################################
+
+
+Evaluation exploration
+
+- Benchmarks
+    - Benchmarked GLADE
+    - 8 ground truth Grammar Oracle
+    - 3 runnable program Oracle
+
+- Accuracy
+    - WHAT DOES DETERMISNISTINC AND NON-DETERMINISTIC MEAN IN THIS CONTEXT.
+
+- Performance Analysis
+    -  Since og is run on python compared to java (GLADE), it is slower
+        - Does building it in C help?
+    - ARVADA's 3 most costly:
+        - calling the Oracle
+        - creating, scoring, and sorting the bubble
+        - sampling string for replacement checks
+
+- Discussion
+    - WHAT IS MAXIMAL GENERALIZATION, AND WHY DOES IT ASSUME CONTEXT FREE?
+    - No observed reaction to context sensitive input languages
+    - There is much room for improvement with the sorting
