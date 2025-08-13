@@ -48,18 +48,16 @@ int main (int argc, char **argv){
      while((read_line_len = getline(&current_line, &line_buffer_len, file_ptr)) != -1){
 
          current_line[read_line_len - 1] = '\0';
-         printf("Current Line = %s\n", current_line);
+         //printf("Current Line = %s\n", current_line);
 
          // builidng the navie parse tree for each sentence
          Node *current_root = malloc(sizeof(Node));
-         current_root->capacity = 80; // randomly assigned
+         current_root->capacity = 10; // randomly assigned
          current_root->parent = NULL;
          current_root->terminal = 0;
          current_root->num_child = 0;
-         //current_root->children = calloc(current_root->capacity, sizeof(Node*));
+         current_root->children = calloc(current_root->capacity, sizeof(Node*));
 
-         /*
-          *
          for(int i = 0; i < (read_line_len - 1); i ++ ){
              //printf("%c\n", current_line[i]);
              Node * node = malloc(sizeof(Node));
@@ -71,18 +69,18 @@ int main (int argc, char **argv){
              node->children = NULL;
              current_root->children[current_root->num_child] = node;
              current_root->num_child ++;
+             check_node_capacity(current_root);
 
          }
-          */
 
          // Check current capacity of the root nodes
          root_nodes->nodes[root_nodes->count] = current_root;
          root_nodes->count = root_nodes->count + 1;
          check_nodes_capacity(root_nodes);
-         print_all_trees(root_nodes);
 
      }
 
+     print_all_trees(root_nodes);
      free(current_line);
      if(!feof(file_ptr)){
          fprintf(stderr, "Error: Stopped reading before end of the file was reached.");
@@ -94,11 +92,10 @@ int main (int argc, char **argv){
      for( int i = 0; i < root_nodes-> count; i ++){
 
          Node *cur_node = root_nodes->nodes[i];
-         //for( int j = 0; j < cur_node->num_child ; j ++){
-             //free(cur_node->children[j]);
-             //}
+         for( int j = 0; j < cur_node->num_child ; j ++){
+             free(cur_node->children[j]);
+             }
          free(cur_node);
-         printf("here %d\n", i);
      }
      free(root_nodes->nodes);
      free(root_nodes);
