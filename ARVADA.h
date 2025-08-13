@@ -8,7 +8,7 @@
 
 /*
     A node sturct to represent each child, each child will store:
-    - capicity
+    - capacity
     - a character
     - parent node
     - boolean
@@ -16,7 +16,7 @@
     - Array of children
 */
 typedef struct node{
-    int capicity;
+    int capacity;
     char character;
     struct node *parent;
     int terminal;
@@ -26,7 +26,7 @@ typedef struct node{
 
 /*
     A struct to keep track of all nodes ever produced in code
-    - capicity: number of nodes it can currently store
+    - capacity: number of nodes it can currently store
     - count: number of total node
     - nodes: a array of node pointers
 */
@@ -37,7 +37,7 @@ typedef struct nodes{
 } Nodes;
 
 void print_all_trees(Nodes *nodes);
-void check_node_capicity(Node *node);
-void check_nodes_capicity(Nodes *nodes);
+void check_node_capacity(Node *node);
+void check_nodes_capacity(Nodes *nodes);
 
 #endif
