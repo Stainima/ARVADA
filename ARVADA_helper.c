@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include <sys/errno.h>
 
+// ------------- Funcitons to help build the original naive trees
+// Section III-A of original paper
+
 // Check and deal with the capicty of root node.
 void check_nodes_capacity(Nodes *nodes){
 
@@ -42,6 +45,7 @@ void check_node_capacity(Node *node){
     printf("Node capacity increase successful: %d.\n",node->capacity);
 
 }
+
 // Print the count and all trees for debugging purposes
 void print_all_trees(Nodes *nodes){
     printf("capacity: %d\n",nodes->capacity);
@@ -56,3 +60,4 @@ void print_all_trees(Nodes *nodes){
         printf("\n");
     }
 }
+//---------------------------------------
