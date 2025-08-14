@@ -21,12 +21,12 @@ int main (int argc, char **argv){
      // and buliding naive parse trees for each sentence
      // Section III-A of original paper
 
-     // Keeping track of all root nodes
+    // Keeping track of all root trees
      // (so each sentence in the sample file)
-     Nodes *root_nodes = malloc(sizeof(Nodes)); // freed
-     root_nodes->capacity = 4; // randomly assigned
-     root_nodes->count = 0;
-     root_nodes->nodes = malloc(root_nodes->capacity * sizeof(Node*)); // freed
+     Nodes *root_trees= malloc(sizeof(Nodes)); // freed
+     root_trees->capacity = 4; // randomly assigned
+     root_trees->count = 0;
+     root_trees->nodes = malloc(root_trees->capacity * sizeof(Node*)); // freed
 
      // Getting the file name and reading it in
      char *file_name = *(argv + 1);
@@ -51,36 +51,36 @@ int main (int argc, char **argv){
          //printf("Current Line = %s\n", current_line);
 
          // builidng the navie parse tree for each sentence
-         Node *current_root = malloc(sizeof(Node));
-         current_root->capacity = 10; // randomly assigned
-         current_root->parent = NULL;
-         current_root->terminal = 0;
-         current_root->num_child = 0;
-         current_root->children = calloc(current_root->capacity, sizeof(Node*));
+         Node *current_tree = malloc(sizeof(Node));
+         current_tree->capacity = 10; // randomly assigned
+         current_tree->parent = NULL;
+         current_tree->t = 0;
+         current_tree->num_child = 0;
+         current_tree->children = calloc(current_tree->capacity, sizeof(Node*));
 
          for(int i = 0; i < (read_line_len - 1); i ++ ){
              //printf("%c\n", current_line[i]);
              Node * node = malloc(sizeof(Node));
-             node->parent = current_root;
+             node->parent = current_tree;
              node->capacity = 0;
              node->character = current_line[i];
-             node->terminal = 1;
+             node-> t= -1;
              node->num_child = 0;
              node->children = NULL;
-             current_root->children[current_root->num_child] = node;
-             current_root->num_child ++;
-             check_node_capacity(current_root);
+             current_tree->children[current_tree->num_child] = node;
+             current_tree->num_child ++;
+             check_node_capacity(current_tree);
 
          }
 
          // Check current capacity of the root nodes
-         root_nodes->nodes[root_nodes->count] = current_root;
-         root_nodes->count = root_nodes->count + 1;
-         check_nodes_capacity(root_nodes);
+         root_trees->nodes[root_trees->count] = current_tree;
+         root_trees->count = root_trees->count + 1;
+         check_nodes_capacity(root_trees);
 
      }
 
-     print_all_trees(root_nodes);
+     print_all_trees(root_trees);
      free(current_line);
      if(!feof(file_ptr)){
          fprintf(stderr, "Error: Stopped reading before end of the file was reached.");
@@ -89,16 +89,16 @@ int main (int argc, char **argv){
      fclose(file_ptr);
 
      // freeing all root nodes
-     for( int i = 0; i < root_nodes-> count; i ++){
+     for( int i = 0; i < root_trees-> count; i ++){
 
-         Node *cur_node = root_nodes->nodes[i];
+         Node *cur_node = root_trees->nodes[i];
          for( int j = 0; j < cur_node->num_child ; j ++){
              free(cur_node->children[j]);
              }
          free(cur_node);
      }
-     free(root_nodes->nodes);
-     free(root_nodes);
+     free(root_trees->nodes);
+     free(root_trees);
 
     return EXIT_SUCCESS; // Indicate successful execution
 }

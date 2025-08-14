@@ -19,7 +19,7 @@ typedef struct node{
     int capacity;
     char character;
     struct node *parent;
-    int terminal;
+    int t;
     int num_child;
     struct node **children;
 } Node;
