@@ -80,3 +80,14 @@ void concatenate(Node *root, char** buffer){
 
     }
 }
+
+// Function to free all the nodes given a root.
+void free_tree(Node *root){
+
+    if (root->num_child > 0){
+        for( int i = 0; i < root->num_child; i++){
+            free_tree(root->children[i]);
+        }
+    }
+    free(root);
+}

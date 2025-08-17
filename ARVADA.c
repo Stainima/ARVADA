@@ -102,10 +102,13 @@ int main (int argc, char **argv){
      for( int i = 0; i < root_trees-> count; i ++){
 
          Node *cur_node = root_trees->nodes[i];
+         free_tree(cur_node);
+         /*
          for( int j = 0; j < cur_node->num_child ; j ++){
              free(cur_node->children[j]);
              }
          free(cur_node);
+          */
      }
      free(root_trees->nodes);
      free(root_trees);

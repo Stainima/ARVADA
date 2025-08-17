@@ -40,5 +40,6 @@ void print_all_trees(Nodes *nodes);
 void check_node_capacity(Node *node);
 void check_nodes_capacity(Nodes *nodes);
 void concatenate(Node *root, char** buffer);
+void free_tree(Node *root);
 
 #endif
