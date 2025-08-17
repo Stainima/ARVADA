@@ -21,7 +21,7 @@ int main (int argc, char **argv){
      // and buliding naive parse trees for each sentence
      // Section III-A of original paper
 
-    // Keeping track of all root trees
+     // Keeping track of all root trees
      // (so each sentence in the sample file)
      Nodes *root_trees= malloc(sizeof(Nodes)); // freed
      root_trees->capacity = 4; // randomly assigned
@@ -87,6 +87,16 @@ int main (int argc, char **argv){
      }
 
      fclose(file_ptr);
+
+     // --------------------------- Finsih building all the naive parse trees ------//
+
+
+     // testing concatenate
+     char *buffer = calloc(1, sizeof(char));
+     concatenate(root_trees->nodes[0], &buffer);
+     printf("Printing buffer: %s\n",buffer);
+     free(buffer);
+
 
      // freeing all root nodes
      for( int i = 0; i < root_trees-> count; i ++){

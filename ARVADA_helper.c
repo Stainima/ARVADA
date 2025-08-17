@@ -1,5 +1,6 @@
 #include "ARVADA.h"
 #include <errno.h>
+#include <stddef.h>
 #include <stdlib.h>
 #include <sys/errno.h>
 
@@ -61,3 +62,21 @@ void print_all_trees(Nodes *nodes){
     }
 }
 //---------------------------------------
+
+// Function to concatenate the nodes into a string given a root node
+void concatenate(Node *root, char** buffer){
+
+    if(root->t == -1){
+        size_t len = strlen(*buffer);
+        char *new_space = realloc(*buffer, (len + 2) * sizeof(char));
+        new_space[len] = root->character;
+        new_space[len + 1] = '\0';
+        *buffer = new_space;
+        return;
+    }
+
+    for( int i = 0; i < root->num_child; i++){
+        concatenate(root->children[i], buffer);
+
+    }
+}
