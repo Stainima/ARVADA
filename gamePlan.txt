@@ -48,5 +48,10 @@ Evaluation exploration
 
 - Discussion
     - WHAT IS MAXIMAL GENERALIZATION, AND WHY DOES IT ASSUME CONTEXT FREE?
+        -- Explained in the video by Caroline
     - No observed reaction to context sensitive input languages
     - There is much room for improvement with the sorting
+
+###################################################################
+Notes:
+- In section III(A),the funciotn MERGEALLVALID is confusing and explained very poorly.
