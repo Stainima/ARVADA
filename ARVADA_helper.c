@@ -88,6 +88,7 @@ void free_tree(Node *root){
         for( int i = 0; i < root->num_child; i++){
             free_tree(root->children[i]);
         }
+        free(root->children);
     }
     free(root);
 }

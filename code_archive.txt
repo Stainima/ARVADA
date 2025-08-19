@@ -1,0 +1,5 @@
+     // use of concatenate
+     char *buffer = calloc(1, sizeof(char));
+     concatenate(root_trees->nodes[0], &buffer);
+     printf("Printing buffer: %s\n",buffer);
+     free(buffer);

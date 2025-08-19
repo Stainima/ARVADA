@@ -91,14 +91,7 @@ int main (int argc, char **argv){
      // --------------------------- Finsih building all the naive parse trees ------//
 
 
-     // testing concatenate
-     char *buffer = calloc(1, sizeof(char));
-     concatenate(root_trees->nodes[0], &buffer);
-     printf("Printing buffer: %s\n",buffer);
-     free(buffer);
-
-
-     // freeing all root nodes
+     // feeing every things
      for( int i = 0; i < root_trees-> count; i ++){
 
          Node *cur_node = root_trees->nodes[i];
