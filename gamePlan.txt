@@ -48,7 +48,7 @@ Evaluation exploration
 
 - Discussion
     - WHAT IS MAXIMAL GENERALIZATION, AND WHY DOES IT ASSUME CONTEXT FREE?
-        -- Explained in the video by Caroline
+        -- Explained in the video by Caroline and in the paper later.
     - No observed reaction to context sensitive input languages
     - There is much room for improvement with the sorting
 
@@ -58,7 +58,7 @@ Notes:
 
 
 Talk with RAHUL::
-Panini paper ( static inference of grammar and parsers ) ( look at these grammars ) 
+Panini paper ( static inference of grammar and parsers ) ( look at these grammars )
 - Look at the research in the latest 5 years after ARVADA.
 - What are the drawbacks of ARVADA?
 - Suspicion that ARVADA is a selective study.
