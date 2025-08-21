@@ -54,4 +54,11 @@ Evaluation exploration
 
 ###################################################################
 Notes:
-- In section III(A),the funciotn MERGEALLVALID is confusing and explained very poorly.
+- In section III(A),the function MERGEALLVALID is confusing and explained very poorly.
+
+
+Talk with RAHUL::
+Panini paper ( static inference of grammar and parsers ) ( look at these grammars ) 
+- Look at the research in the latest 5 years after ARVADA.
+- What are the drawbacks of ARVADA?
+- Suspicion that ARVADA is a selective study.
