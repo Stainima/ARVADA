@@ -13,6 +13,7 @@
     - parent node
     - boolean
     - number of children
+    - number of the position of the node in the tree
     - Array of children
 */
 typedef struct node{
@@ -21,6 +22,7 @@ typedef struct node{
     struct node *parent;
     int t;
     int num_child;
+    int pos;
     struct node **children;
 } Node;
 

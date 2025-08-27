@@ -54,6 +54,7 @@ int main (int argc, char **argv){
          Node *current_tree = malloc(sizeof(Node));
          current_tree->capacity = 10; // randomly assigned
          current_tree->parent = NULL;
+         current_tree->pos = -1;
          current_tree->t = 0;
          current_tree->num_child = 0;
          current_tree->children = calloc(current_tree->capacity, sizeof(Node*));
@@ -66,6 +67,7 @@ int main (int argc, char **argv){
              node->character = current_line[i];
              node-> t= -1;
              node->num_child = 0;
+             node->pos = i;
              node->children = NULL;
              current_tree->children[current_tree->num_child] = node;
              current_tree->num_child ++;
