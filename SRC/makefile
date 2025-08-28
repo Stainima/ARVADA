@@ -1,6 +1,7 @@
 CC := gcc
 Cflags := -fsanitize=address
-Ofiles := ARVADA.o ARVADA_helper.o while_oracle.o
+Ofiles := ARVADA.o ARVADA_helper.o simple_while_oracle.o
+Cfiles := ARVADA.c ARVADA.h ARVADA_helper.c simple_while_oracle.c
 
 arvada: $(Ofiles)
 	$(CC) $(Cflags) $(Ofiles) -o arvada.out
@@ -8,8 +9,8 @@ arvada: $(Ofiles)
 debug: $(Ofiles)
 	$(CC) $(Ofiles) -o arvada.out
 
-ARVADA.o: ARVADA.c ARVADA.h ARVADA_helper.c while_oracle.c
-	$(CC) -c ARVADA.c ARVADA_helper.c while_oracle.c
+ARVADA.o: $(Cfiles)
+	$(CC) -c $(Cfiles)
 
 clean:
-	rm arvada.out ARVADA.o ARVADA_helper.o while_oracle.o
+	rm arvada.out $(Ofiles)

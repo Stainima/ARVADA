@@ -43,6 +43,6 @@ void check_node_capacity(Node *node);
 void check_nodes_capacity(Nodes *nodes);
 void concatenate(Node *root, char** buffer);
 void free_tree(Node *root);
-int validate_while_program(const char* input);
+int oracle_validate(const char* input);
 
 #endif

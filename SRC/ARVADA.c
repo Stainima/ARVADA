@@ -82,7 +82,7 @@ int main (int argc, char **argv){
 
      }
 
-     print_all_trees(root_trees);
+     //print_all_trees(root_trees);
      free(current_line);
      if(!feof(file_ptr)){
          fprintf(stderr, "Error: Stopped reading before end of the file was reached.");
@@ -91,6 +91,15 @@ int main (int argc, char **argv){
      fclose(file_ptr);
 
      // --------------------------- Finsih building all the naive parse trees ------//
+
+
+
+     char *buffer = calloc(1, sizeof(char));
+     concatenate(root_trees->nodes[0], &buffer);
+     printf("Printing buffer: %s\n",buffer);
+     int out = oracle_validate(buffer);
+     printf("Validting buffer: %d\n",out);
+     free(buffer);
 
 
      // feeing every things

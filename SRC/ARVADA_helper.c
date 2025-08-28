@@ -23,7 +23,7 @@ void check_nodes_capacity(Nodes *nodes){
         return;
     }
     nodes->nodes = new_space;
-    printf("Root-Nodes capacity increase successful: %d.\n",nodes->capacity);
+    //printf("Root-Nodes capacity increase successful: %d.\n",nodes->capacity);
 
 }
 
@@ -43,14 +43,14 @@ void check_node_capacity(Node *node){
         return;
     }
     node->children= new_space;
-    printf("Node capacity increase successful: %d.\n",node->capacity);
+    //printf("Node capacity increase successful: %d.\n",node->capacity);
 
 }
 
 // Print the count and all trees for debugging purposes
 void print_all_trees(Nodes *nodes){
-    printf("capacity: %d\n",nodes->capacity);
-    printf("Number of root trees: %d\n",nodes->count);
+    //printf("capacity: %d\n",nodes->capacity);
+    //printf("Number of root trees: %d\n",nodes->count);
 
     for (int i = 0; i < nodes->count; i++){
         Node *cur = nodes->nodes[i];
