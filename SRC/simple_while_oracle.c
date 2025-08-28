@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include "ARVADA.h"
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -377,7 +377,7 @@ int parse_program() {
 }
 
 // Main validation function
-int oracle_validate(char* code) {
+int validate_simple_while_grammar(char* code){
     input = code;
     pos = 0;
     len = strlen(code);
