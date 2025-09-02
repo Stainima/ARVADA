@@ -97,6 +97,28 @@ void free_tree(Node *root){
 // section III-A, Algorithm 1 (high level) line 2
 void merge_all_valid(Node *root){
 
+    // Duplicate the tree given the root so we do not affect the origial tree.
+    Node *dul_root = calloc(1, sizeof(Node));
+    dul_root->capacity = root->capacity;
+    dul_root->character = root->character;
+    dul_root->t = root->t;
+    dul_root->pos = root->pos;
+    dul_root->num_child = root->num_child;
+    dul_root->children = calloc(dul_root->num_child, sizeof(Node*));
 
+    for( int i = 0; i < dul_root->num_child; i++){
+        Node *cur_og = root->children[i];
 
+        Node * node = malloc(sizeof(Node));
+        node->parent = dul_root;
+        node->capacity = 0;
+        node->character = cur_og->character;
+        node-> t= -1;
+        node->num_child = 0;
+        node->pos = i;
+        node->children = NULL;
+        dul_root->children[i] = node;
+    }
+
+    free_tree(dul_root)
 }
