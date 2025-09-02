@@ -55,6 +55,7 @@ Evaluation exploration
 ###################################################################
 Notes:
 - In section III(A),the function MERGEALLVALID is confusing and explained very poorly.
+- When generating parser/validator with ANTLR4. It cannot generate a parser for c. So gonna have to use python.
 
 
 Talk with RAHUL::

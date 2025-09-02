@@ -92,3 +92,11 @@ void free_tree(Node *root){
     }
     free(root);
 }
+
+// Function to perform merge all valid from paper
+// section III-A, Algorithm 1 (high level) line 2
+void merge_all_valid(Node *root){
+
+
+
+}

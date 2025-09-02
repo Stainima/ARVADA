@@ -1,0 +1,10 @@
+x = 5;
+while (i < 10) { i = i + 1; }
+if (x == 0) { y = 1; }
+if (a > b) { max = a; } else { max = b; }
+while (count != 0) { sum = sum + count; count = count - 1; }
+if (x <= y) { result = x * 2; } else { result = y / 2; }
+counter = 0; while (counter < n) { total = total + arr; counter = counter + 1; }
+if (temp >= 100) { status = 1; } else { if (temp < 32) { status = 0; } else { status = 2; } }
+while (x > 0) { if (x % 2 == 0) { even = even + 1; } else { odd = odd + 1; } x = x - 1; }
+flag = 1; while (flag == 1) { if (input > threshold) { output = input * factor; flag = 0; } else { input = input + step; } }
