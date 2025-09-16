@@ -92,15 +92,8 @@ int main (int argc, char **argv){
 
      // --------------------------- Finsih building all the naive parse trees ------//
 
-
-
      for( int i = 0; i < root_trees -> count; i++){
-         char *buffer = calloc(1, sizeof(char));
-         concatenate(root_trees->nodes[i], &buffer);
-         printf("Printing buffer: %s\n",buffer);
-         int out = validate_simple_while_grammar(buffer);
-         printf("Validting buffer: %d\n",out);
-         free(buffer);
+         merge_all_valid(root_trees->nodes[i]);
      }
 
 

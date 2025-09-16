@@ -93,32 +93,68 @@ void free_tree(Node *root){
     free(root);
 }
 
-// Function to perform merge all valid from paper
-// section III-A, Algorithm 1 (high level) line 2
-void merge_all_valid(Node *root){
+
+Node *duplicate_root(Node *root){
 
     // Duplicate the tree given the root so we do not affect the origial tree.
-    Node *dul_root = calloc(1, sizeof(Node));
-    dul_root->capacity = root->capacity;
-    dul_root->character = root->character;
-    dul_root->t = root->t;
-    dul_root->pos = root->pos;
-    dul_root->num_child = root->num_child;
-    dul_root->children = calloc(dul_root->num_child, sizeof(Node*));
+    Node *dup_root = calloc(1, sizeof(Node));
+    dup_root->capacity = root->capacity;
+    dup_root->character = root->character;
+    dup_root->t = root->t;
+    dup_root->pos = root->pos;
+    dup_root->num_child = root->num_child;
+    dup_root->children = calloc(dup_root->num_child, sizeof(Node*));
 
-    for( int i = 0; i < dul_root->num_child; i++){
+    for( int i = 0; i < dup_root->num_child; i++){
         Node *cur_og = root->children[i];
 
         Node * node = malloc(sizeof(Node));
-        node->parent = dul_root;
+        node->parent = dup_root;
         node->capacity = 0;
         node->character = cur_og->character;
         node-> t= -1;
         node->num_child = 0;
         node->pos = i;
         node->children = NULL;
-        dul_root->children[i] = node;
+        dup_root->children[i] = node;
     }
 
-    free_tree(dul_root)
+    return dup_root;
+
+}
+
+// Function to perform merge all valid from paper
+// section III-A, Algorithm 1 (high level) line 2
+void merge_all_valid(Node *root){
+
+    Node *dup_root = duplicate_root(root);
+    // Go through the list 1 once
+    for( int i = 0; i < dup_root->num_child; i++){
+
+        if (dup_root->children[i]->character == ' '){
+            continue;
+        }
+        // Go through the list number 2 for perms
+        for ( int j = i + 1; j < dup_root->num_child; j++){
+
+            Node *tmp = dup_root->children[i];
+
+            // Skip the spaces for now
+            if (dup_root->children[j]->character == ' '){
+                continue;
+            }
+
+            //dup_root->children[i] = dup_root->children[j];
+            //dup_root->children[j] = tmp;
+            char *buffer = calloc(1, sizeof(char));
+            concatenate(dup_root, &buffer);
+            int valid = is_while_loop_valid(buffer);
+            printf("Printing buffer: %s and %d\n",buffer,valid);
+            free(buffer);
+        }
+
+    }
+
+    free_tree(dup_root);
+
 }

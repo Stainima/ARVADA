@@ -54,12 +54,36 @@ Evaluation exploration
 
 ###################################################################
 Notes:
+
+- Overall the paper is very confusing, and a lot of work is required to properly re-implement this solution.
+
 - In section III(A),the function MERGEALLVALID is confusing and explained very poorly.
+    - Implementation feels very vague and ambugious.
+    - What is ta, and tb in these scenario. Is ta a non-terminal that contains just the 1 singular character.
+        This creates problem as now it is just checking characters agains charcter, which would create new unecessary no
+        terminal. Hence, other route was taken.
+    - Is the checking just happening in 1 tree or across multiple trees. Tree, trees, and strings are being used interchangable
+        and is very difficult to follow.
+    - What is the purpose of Mergeallvalid, it is even needed??
+
 - When generating parser/validator with ANTLR4. It cannot generate a parser for c. So gonna have to use python.
 
+- Accpetance of the fact that ARVADA is strictly reliant on the cases that use uniform labeling ( eg. variable name are only accepted
+if it is use in the set of examples provided )
+- Doing this in c is very intensive, especially in terms of memory and can get overwhelming very fast.
 
-Talk with RAHUL::
+- for t1,t2 ... how does the incrementing work. This is not specified in the paper, hence have to use own intution.
+
+
+Section III(D)
+- Very Confusing to work with
+
+Talk with RAHUL:
 Panini paper ( static inference of grammar and parsers ) ( look at these grammars )
 - Look at the research in the latest 5 years after ARVADA.
 - What are the drawbacks of ARVADA?
 - Suspicion that ARVADA is a selective study.
+
+
+Changes you have made different from the study
+- You have not given each node a tc1, tc2 like in the original study. More complicated in C and might be uneccassary.

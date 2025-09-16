@@ -3,6 +3,10 @@ Cflags := -fsanitize=address
 Ofiles := ARVADA.o ARVADA_helper.o simple_while_oracle.o
 Cfiles := ARVADA.c ARVADA.h ARVADA_helper.c simple_while_oracle.c
 
+
+#Ofiles := ARVADA.o ARVADA_helper.o rigged_parser.o
+#Cfiles := ARVADA.c ARVADA.h ARVADA_helper.c rigged_parser.c
+
 arvada: $(Ofiles)
 	$(CC) $(Cflags) $(Ofiles) -o arvada.out
 

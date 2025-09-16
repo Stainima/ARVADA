@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 /*
     A node sturct to represent each child, each child will store:
@@ -43,7 +44,9 @@ void check_node_capacity(Node *node);
 void check_nodes_capacity(Nodes *nodes);
 void concatenate(Node *root, char** buffer);
 void free_tree(Node *root);
-int validate_simple_while_grammar(char* code);
-int validate_special_while_grammar(char* code);
+int is_while_loop_valid(const char *input);
+//int check_rigged_parser(const char *input);
+Node *duplicate_root(Node *root);
+void merge_all_valid(Node *root);
 
 #endif
