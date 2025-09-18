@@ -157,6 +157,8 @@ void merge_all_valid(Node *root){
 
 }
 
+// Fucntion to perform sampling string for string replacements
+// refer to section III-D, from the original
 int replace(Node *replacer, Node *replacee, Nodes *trees){
 
     return 1;
