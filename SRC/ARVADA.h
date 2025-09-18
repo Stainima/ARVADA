@@ -48,5 +48,6 @@ int is_while_loop_valid(const char *input);
 //int check_rigged_parser(const char *input);
 Node *duplicate_root(Node *root);
 void merge_all_valid(Node *root);
+int replace(Node *replacer, Node *replacee, Nodes *trees);
 
 #endif

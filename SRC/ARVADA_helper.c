@@ -144,8 +144,6 @@ void merge_all_valid(Node *root){
                 continue;
             }
 
-            //dup_root->children[i] = dup_root->children[j];
-            //dup_root->children[j] = tmp;
             char *buffer = calloc(1, sizeof(char));
             concatenate(dup_root, &buffer);
             int valid = is_while_loop_valid(buffer);
@@ -157,4 +155,9 @@ void merge_all_valid(Node *root){
 
     free_tree(dup_root);
 
+}
+
+int replace(Node *replacer, Node *replacee, Nodes *trees){
+
+    return 1;
 }
