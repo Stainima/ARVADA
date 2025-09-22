@@ -81,6 +81,15 @@ void concatenate(Node *root, char** buffer){
     }
 }
 
+// Fucntion to concat and print
+void contact_and_print(Node *tree){
+
+    char *buffer = calloc(1, sizeof(char));
+    concatenate(tree, &buffer);
+    int valid = is_while_loop_valid(buffer);
+    printf("Printing buffer: %s \n",buffer);
+}
+
 // Function to free all the nodes given a root.
 void free_tree(Node *root){
 
@@ -144,11 +153,6 @@ void merge_all_valid(Node *root){
                 continue;
             }
 
-            char *buffer = calloc(1, sizeof(char));
-            concatenate(dup_root, &buffer);
-            int valid = is_while_loop_valid(buffer);
-            printf("Printing buffer: %s and %d\n",buffer,valid);
-            free(buffer);
         }
 
     }
@@ -157,9 +161,46 @@ void merge_all_valid(Node *root){
 
 }
 
+
 // Fucntion to perform sampling string for string replacements
 // refer to section III-D, from the original
-int replace(Node *replacer, Node *replacee, Nodes *trees){
+int replace(Node *replacer, Node *replacee, Node *dup_tree, int pos){
+
+    // Check if you are replacing single char so you can compare char
+    // as terminal do not have a tid ( implementation diff )
+    int terminal_replacee = 0;
+    if (replacee->t == -1){
+        terminal_replacee = 1;
+    }
+
+    // Flags to redue calls to the oracle
+    int forward = 1;
+
+    // Looping through all the nodes in t0
+    for ( int i = pos; i < dup_tree->num_child;  i++){
+
+        Node *cur = dup_tree->children[i];
+
+        // if it is a terminal replaceea and no the correct 1
+        // right now. Continue
+        if (terminal_replacee){
+            if (cur->character != replacee->character){
+                continue;
+            }
+        }
+
+        // perform the swap.
+        dup_tree->children[i] = replacer;
+        replace(replacer, replacee, dup_tree, i + 1);
+        if(forward){
+            contact_and_print(dup_tree);
+            forward = 0;
+        }
+        dup_tree->children[i] = replacee;
+        replace(replacer, replacee, dup_tree, i + 1);
+
+    }
+
 
     return 1;
 }

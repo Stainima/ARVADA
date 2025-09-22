@@ -13,7 +13,7 @@
     - a character
     - parent node
     - boolean
-    - number of children
+    - number of children (note this coould also be used for coverage range of non-terminals)
     - number of the position of the node in the tree
     - Array of children
 */
@@ -48,6 +48,6 @@ int is_while_loop_valid(const char *input);
 //int check_rigged_parser(const char *input);
 Node *duplicate_root(Node *root);
 void merge_all_valid(Node *root);
-int replace(Node *replacer, Node *replacee, Nodes *trees);
+int replace(Node *replacer, Node *replacee, Node *dup_tree, int pos);
 
 #endif
