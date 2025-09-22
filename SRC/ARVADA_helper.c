@@ -88,6 +88,7 @@ void contact_and_print(Node *tree){
     concatenate(tree, &buffer);
     int valid = is_while_loop_valid(buffer);
     printf("Printing buffer: %s \n",buffer);
+    free(buffer);
 }
 
 // Function to free all the nodes given a root.
@@ -153,6 +154,7 @@ void merge_all_valid(Node *root){
                 continue;
             }
 
+            merge(tmp, dup_root->children[j], dup_root);
         }
 
     }
@@ -162,9 +164,20 @@ void merge_all_valid(Node *root){
 }
 
 
+// Merge function
+int merge(Node *node_1, Node *node_2, Node *dup_tree){
+
+    int *res = calloc(1, sizeof(int));
+    *res = 1;
+    replace(node_1, node_2, dup_tree, 0, res);
+
+    free(res);
+    return 1;
+}
+
 // Fucntion to perform sampling string for string replacements
 // refer to section III-D, from the original
-int replace(Node *replacer, Node *replacee, Node *dup_tree, int pos){
+void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
 
     // Check if you are replacing single char so you can compare char
     // as terminal do not have a tid ( implementation diff )
@@ -191,16 +204,17 @@ int replace(Node *replacer, Node *replacee, Node *dup_tree, int pos){
 
         // perform the swap.
         dup_tree->children[i] = replacer;
-        replace(replacer, replacee, dup_tree, i + 1);
+        replace(replacer, replacee, dup_tree, i + 1, res);
         if(forward){
+            // call to oracle then
+            // if (call to oracle) -> pass : *res = 0;
             contact_and_print(dup_tree);
             forward = 0;
         }
-        dup_tree->children[i] = replacee;
-        replace(replacer, replacee, dup_tree, i + 1);
+        dup_tree->children[i] = cur;
+        replace(replacer, replacee, dup_tree, i + 1, res);
 
     }
 
-
-    return 1;
+    *res = 1;
 }

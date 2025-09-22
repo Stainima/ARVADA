@@ -1,4 +1,5 @@
 #include "ARVADA.h"
+#include <stdlib.h>
 
 // All steps referenced according to Original paper
 
@@ -92,15 +93,9 @@ int main (int argc, char **argv){
 
      // --------------------------- Finsih building all the naive parse trees ------//
 
-     //Implementing merge all valid
-     /*
-      *
      for( int i = 0; i < root_trees -> count; i++){
          merge_all_valid(root_trees->nodes[i]);
      }
-      */
-      Node *tree = duplicate_root(root_trees->nodes[0]);
-      replace(tree->children[0],tree->children[1], tree, 0);
 
      // feeing every things
      for( int i = 0; i < root_trees-> count; i ++){
