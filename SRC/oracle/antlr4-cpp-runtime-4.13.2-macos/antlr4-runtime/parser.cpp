@@ -13,9 +13,9 @@ class MyParserErrorListener: public antlr4::BaseErrorListener {
       size_t charPositionInLine,
       const std::string &msg,
       std::exception_ptr e) override {
-    //std::ostrstream s;
-    //s << "Line(" << line << ":" << charPositionInLine << ") Error(" << msg << ")";
-    //throw std::invalid_argument(s.str());
+    std::ostrstream s;
+    s << "Line(" << line << ":" << charPositionInLine << ") Error(" << msg << ")";
+    throw std::invalid_argument(s.str());
   }
 };
 
@@ -37,10 +37,10 @@ int main(int argc, char *argv[]) {
   parser.addErrorListener(&errorListner);
   try {
     antlr4::tree::ParseTree* tree = parser.main();
-    //std::cout << tree->toStringTree() << std::endl;
+    std::cout << tree->toStringTree() << std::endl;
     return 0;
   } catch (std::invalid_argument &e) {
-    //std::cout << e.what() << std::endl;
+    std::cout << e.what() << std::endl;
     return 10;
   }
 }

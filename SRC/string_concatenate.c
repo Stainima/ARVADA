@@ -25,7 +25,6 @@ void contact_and_print(Node *tree){
 
     char *buffer = calloc(1, sizeof(char));
     concatenate(tree, &buffer);
-    int valid = parse_string(buffer);
-    printf("Printing buffer: %s and %d \n",buffer, valid);
+    printf("Printing buffer: %s.\n",buffer);
     free(buffer);
 }

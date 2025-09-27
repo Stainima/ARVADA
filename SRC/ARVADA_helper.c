@@ -6,6 +6,7 @@
 
 // Function to perform merge all valid from paper
 // section III-A, Algorithm 1 (high level) line 2
+// NOTE CURRENTLY PRE-TOKENIZATION IS OFF
 void merge_all_valid(Node *root){
 
     Node *dup_root = duplicate_root(root);
@@ -24,6 +25,7 @@ void merge_all_valid(Node *root){
             if (dup_root->children[j]->character == ' '){
                 continue;
             }
+            //printf("Combs: i = %d, j = %d.\n", i, j);
 
             merge(tmp, dup_root->children[j], dup_root);
         }
@@ -38,21 +40,33 @@ void merge_all_valid(Node *root){
 // Merge function
 int merge(Node *node_1, Node *node_2, Node *dup_tree){
 
+    // If any of the replacement is invalid, it will set a var to false
     int *res = calloc(1, sizeof(int));
     *res = 1;
     replace(node_1, node_2, dup_tree, 0, res);
 
+    if(!(*res)){
+        replace(node_2, node_1, dup_tree, 0, res);
+    }
+
+    int cur_res = *res;
     free(res);
-    return 1;
+    return cur_res;
 }
 
 // Fucntion to perform sampling string for string replacements
 // refer to section III-D, from the original
 void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
 
+    //if at any point res become 0, stop execution immediately
+    if (!(*res)){
+        return;
+    }
+
     // Check if you are replacing single char so you can compare char
     // as terminal do not have a tid ( implementation diff )
     int terminal_replacee = 0;
+
     if (replacee->t == -1){
         terminal_replacee = 1;
     }
@@ -79,7 +93,11 @@ void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
         if(forward){
             // call to oracle then
             // if (call to oracle) -> pass : *res = 0;
-            contact_and_print(dup_tree);
+            char *buffer = calloc(1, sizeof(char));
+            concatenate(dup_tree, &buffer);
+            int valid = parse_string(buffer);
+            printf("Printing buffer: %s and %d.\n",buffer, valid);
+            free(buffer);
             forward = 0;
         }
         dup_tree->children[i] = cur;

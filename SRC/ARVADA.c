@@ -95,7 +95,7 @@ int main (int argc, char **argv){
 
      for( int i = 0; i < root_trees -> count; i++){
          merge_all_valid(root_trees->nodes[i]);
-     }
+    }
 
 
      // ---------------------------------------------------------------------------//
