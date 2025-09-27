@@ -97,6 +97,19 @@ int main (int argc, char **argv){
          merge_all_valid(root_trees->nodes[i]);
      }
 
+
+     // ---------------------------------------------------------------------------//
+     // Straring the main while loop
+
+     int updated = 1;
+    while (updated){
+
+        updated = 0;
+        // allBubles
+        // iterate over the bubbles.
+
+    }
+
      // feeing every things
      for( int i = 0; i < root_trees-> count; i ++){
 

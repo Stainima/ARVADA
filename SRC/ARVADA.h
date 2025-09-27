@@ -2,10 +2,16 @@
 #define ARVADA_H
 
 #include <stdio.h>
+#include <errno.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stddef.h>
+#include <stdlib.h>
+#include <sys/errno.h>
 
 /*
     A node sturct to represent each child, each child will store:
@@ -44,11 +50,11 @@ void check_node_capacity(Node *node);
 void check_nodes_capacity(Nodes *nodes);
 void concatenate(Node *root, char** buffer);
 void free_tree(Node *root);
-int is_while_loop_valid(const char *input);
-//int check_rigged_parser(const char *input);
 Node *duplicate_root(Node *root);
 void merge_all_valid(Node *root);
 int merge(Node *node_1, Node *node_2, Node *dup_tree);
 void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res);
+int parse_string(const char* input);
+void contact_and_print(Node *tree);
 
 #endif

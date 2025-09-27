@@ -1,11 +1,7 @@
 CC := gcc
 Cflags := -fsanitize=address
-Ofiles := ARVADA.o ARVADA_helper.o simple_while_oracle.o
-Cfiles := ARVADA.c ARVADA.h ARVADA_helper.c simple_while_oracle.c
-
-
-#Ofiles := ARVADA.o ARVADA_helper.o rigged_parser.o
-#Cfiles := ARVADA.c ARVADA.h ARVADA_helper.c rigged_parser.c
+Ofiles := ARVADA.o ARVADA_helper.o parse_tree_builder.o string_concatenate.o
+Cfiles := ARVADA.c ARVADA.h ARVADA_helper.c parse_tree_builder.c string_concatenate.c
 
 arvada: $(Ofiles)
 	$(CC) $(Cflags) $(Ofiles) -o arvada.out
