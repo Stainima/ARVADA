@@ -25,7 +25,7 @@ void merge_all_valid(Node *root){
             if (dup_root->children[j]->character == ' '){
                 continue;
             }
-            //printf("Combs: i = %d, j = %d.\n", i, j);
+            printf("Combs: i = %d, j = %d.\n", i, j);
 
             merge(tmp, dup_root->children[j], dup_root);
         }
@@ -95,12 +95,18 @@ void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
             // if (call to oracle) -> pass : *res = 0;
             char *buffer = calloc(1, sizeof(char));
             concatenate(dup_tree, &buffer);
-            int valid = parse_string(buffer);
-            printf("Printing buffer: %s and %d.\n",buffer, valid);
+            *res = parse_string(buffer);
+            printf("Printing buffer: %s and %d.\n",buffer, *res);
             free(buffer);
             forward = 0;
+
         }
         dup_tree->children[i] = cur;
+        // case where 1 of the candidate string is invalid, so return.
+        if(!*res){
+            return;
+        }
+        contact_and_print(dup_tree);
         replace(replacer, replacee, dup_tree, i + 1, res);
 
     }
