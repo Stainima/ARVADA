@@ -3,6 +3,20 @@
 // ------------- Funcitons to help build the original naive trees
 // Section III-A of original paper
 
+// Fucntion to that buids a basic node
+Node *build_basic_node(){
+
+    Node * node = malloc(sizeof(Node));
+    node->parent = NULL;
+    node->capacity = 0;
+    node->character = '\0';
+    node-> t= -1;
+    node->num_child = 0;
+    node->pos = -1;
+    node->children = NULL;
+    return node;
+}
+
 // Check and deal with the capicty of root node.
 void check_nodes_capacity(Nodes *nodes){
 
@@ -73,28 +87,27 @@ void free_tree(Node *root){
 
 
 // Funciton that will duiplicate the root, including all children given a root
-Node *duplicate_root(Node *root){
+Node *duplicate_tree(Node *root){
 
     // Duplicate the tree given the root so we do not affect the origial tree.
-    Node *dup_root = calloc(1, sizeof(Node));
+    Node *dup_root = build_basic_node();
     dup_root->capacity = root->capacity;
+    dup_root->parent = root->parent;
     dup_root->character = root->character;
     dup_root->t = root->t;
     dup_root->pos = root->pos;
     dup_root->num_child = root->num_child;
+
+    if(root->children == NULL && root->t == -1){
+        return dup_root;
+    }
+
     dup_root->children = calloc(dup_root->num_child, sizeof(Node*));
 
     for( int i = 0; i < dup_root->num_child; i++){
-        Node *cur_og = root->children[i];
 
-        Node * node = malloc(sizeof(Node));
+        Node * node = duplicate_tree(root->children[i]);
         node->parent = dup_root;
-        node->capacity = 0;
-        node->character = cur_og->character;
-        node-> t= -1;
-        node->num_child = 0;
-        node->pos = i;
-        node->children = NULL;
         dup_root->children[i] = node;
     }
 

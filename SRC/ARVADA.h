@@ -13,6 +13,9 @@
 #include <stdlib.h>
 #include <sys/errno.h>
 
+// Making tid global
+extern int *tid;
+
 /*
     A node sturct to represent each child, each child will store:
     - capacity
@@ -45,14 +48,16 @@ typedef struct nodes{
     struct node **nodes;
 } Nodes;
 
+Node *build_basic_node();
 void print_all_trees(Nodes *nodes);
 void check_node_capacity(Node *node);
 void check_nodes_capacity(Nodes *nodes);
 void concatenate(Node *root, char** buffer);
 void free_tree(Node *root);
-Node *duplicate_root(Node *root);
+Node *duplicate_tree(Node *root);
 void merge_all_valid(Node *root);
 int merge(Node *node_1, Node *node_2, Node *dup_tree);
+int validate_merge(Node *node_1, Node *node_2, Node *dup_tree);
 void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res);
 int parse_string(const char* input);
 void contact_and_print(Node *tree);

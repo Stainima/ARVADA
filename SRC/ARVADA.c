@@ -1,16 +1,18 @@
 #include "ARVADA.h"
+#include <nl_types.h>
 #include <stdlib.h>
 
 // All steps referenced according to Original paper
 
-
-
-
-
-
+////////////////
+// Global var to keep track of tid
+int *tid;
 //////////////////////////////////////////////////////////////////////////////
 
 int main (int argc, char **argv){
+
+    // setting up tid
+    tid = calloc(1, sizeof(int));
 
     // Argument check
     if ( argc < 2){
@@ -52,24 +54,17 @@ int main (int argc, char **argv){
          //printf("Current Line = %s\n", current_line);
 
          // builidng the navie parse tree for each sentence
-         Node *current_tree = malloc(sizeof(Node));
+         Node *current_tree = build_basic_node();
          current_tree->capacity = 10; // randomly assigned
-         current_tree->parent = NULL;
-         current_tree->pos = -1;
          current_tree->t = 0;
-         current_tree->num_child = 0;
          current_tree->children = calloc(current_tree->capacity, sizeof(Node*));
 
          for(int i = 0; i < (read_line_len - 1); i ++ ){
              //printf("%c\n", current_line[i]);
-             Node * node = malloc(sizeof(Node));
+             Node * node = build_basic_node();
              node->parent = current_tree;
-             node->capacity = 0;
              node->character = current_line[i];
-             node-> t= -1;
-             node->num_child = 0;
              node->pos = i;
-             node->children = NULL;
              current_tree->children[current_tree->num_child] = node;
              current_tree->num_child ++;
              check_node_capacity(current_tree);
@@ -118,6 +113,7 @@ int main (int argc, char **argv){
      }
      free(root_trees->nodes);
      free(root_trees);
+     free(tid);
 
     return EXIT_SUCCESS; // Indicate successful execution
 }

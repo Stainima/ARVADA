@@ -9,7 +9,7 @@
 // NOTE CURRENTLY PRE-TOKENIZATION IS OFF
 void merge_all_valid(Node *root){
 
-    Node *dup_root = duplicate_root(root);
+    Node *dup_root = duplicate_tree(root);
     // Go through the list 1 once
     for( int i = 0; i < dup_root->num_child; i++){
 
@@ -25,7 +25,6 @@ void merge_all_valid(Node *root){
             if (dup_root->children[j]->character == ' '){
                 continue;
             }
-            printf("Combs: i = %d, j = %d.\n", i, j);
 
             merge(tmp, dup_root->children[j], dup_root);
         }
@@ -36,9 +35,16 @@ void merge_all_valid(Node *root){
 
 }
 
-
-// Merge function
+//Merge funciton
+// Reference to seciton III-C of the original paper
 int merge(Node *node_1, Node *node_2, Node *dup_tree){
+
+    int attempted_merge = validate_merge(node_1, node_2, dup_tree);
+    return attempted_merge;
+}
+
+// Function to valid merge
+int validate_merge(Node *node_1, Node *node_2, Node *dup_tree){
 
     // If any of the replacement is invalid, it will set a var to false
     int *res = calloc(1, sizeof(int));
