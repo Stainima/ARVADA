@@ -133,20 +133,29 @@ void pre_tokenise(Node* root){
                 tmp->children[0] = NULL;
                 free((tmp)->children);
                 free_tree(tmp);
-            } else if (sequence_length == 0 ) {
-                tmp->num_child = 0;
-                tmp->children[0] = NULL;
-                free((tmp)->children);
-                free_tree(tmp);
+            }else if(sequence_length >1 ){
+                tmp->parent = tmp->children[0]->parent;
+                (*tid) ++;
+                tmp->t_label = *tid;
+
+                Node *p = cur_node->parent;
+                if (p) {
+                    p->children[p->num_child] = tmp;
+                    (p->num_child)++;
+                    check_node_capacity(p);
+                }
+
             }
+
+            tmp = build_basic_node_with_list();
             root->children[root->num_child] = cur_node;
             root->num_child++;
             check_node_capacity(root);
-            tmp = build_basic_node_with_list();
             sequence_begun = 0;
             sequence_length = 0;
         }
     }
+    // deal with leftover seq
     if(sequence_length == 1){
         root->children[root->num_child] = tmp->children[0];
         root->num_child ++;
