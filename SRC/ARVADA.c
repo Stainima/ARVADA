@@ -89,10 +89,15 @@ int main (int argc, char **argv){
 
      // --------------------------- Finsih building all the naive parse trees ------//
 
-     // Pre-tokenise
-     for (int i = 0; i < root_trees->count; i ++){
-         pre_tokenise(root_trees->rootNodes[i]);
-         concact_and_print_with_lvl(root_trees->rootNodes[i]);
+     // Step 2: Toggeling pre-tokenisation
+     // Section III-E of Original paper
+     int tokenise = 0;
+
+     if(tokenise){
+        for (int i = 0; i < root_trees->count; i ++){
+            pre_tokenise(root_trees->rootNodes[i]);
+            concact_and_print_with_lvl(root_trees->rootNodes[i]);
+        }
      }
 
      // ----------------------------MERGEALLVALID----------------------------------//
