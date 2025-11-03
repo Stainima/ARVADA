@@ -1,4 +1,5 @@
 #include "ARVADA.h"
+#include <stdio.h>
 
 // ------------- Funcitons to help build the original naive trees
 // Section III-A of original paper

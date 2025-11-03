@@ -13,10 +13,9 @@ void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun
         // Because the parent of the first child is never assigned,
         // this is done to deal with cases where a sequence of just
         // length 1 is found.
-        if(*sequence_length == 1){
+        if (*sequence_length == 1 && (*tmp)->num_child > 0) {
             (*tmp)->children[0]->parent = *tmp;
         }
-
         // Assigning the current node to tmp,
         // increase sequence number.
         cur_node->parent = *tmp;
@@ -30,12 +29,17 @@ void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun
 
         // different sequence of length 1 is in progress.
         if(*sequence_length == 1){
-            printf("here: %c\n.", cur_node->character);
-            cur_node->parent->children[cur_node->parent->num_child] = (*tmp)->children[0];
-            (cur_node->parent->num_child)++;
-            check_node_capacity(cur_node->parent);
+            // previous sequence was just one node — discard wrapper
+            Node *p = cur_node->parent;
+            if (p) {
+                p->children[p->num_child] = (*tmp)->children[0];
+                (p->num_child)++;
+                check_node_capacity(p);
+                }
+
             (*tmp)->num_child = 0;
             (*tmp)->children[0] = NULL;
+            free((*tmp)->children);
             free_tree(*tmp);
             *tmp= build_basic_node_with_list();
             (*tmp)->children[(*tmp)->num_child] = cur_node;
@@ -44,15 +48,20 @@ void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun
 
         // different sequence of length greater than 1 has begun.
         }else if(*sequence_length > 1){
-            // Assign parent of tmp as we are now about to
-            // finalise the sequence in progress
+            // finalise previous multi-node sequence
             (*tmp)->parent = (*tmp)->children[0]->parent;
             *tid = *tid + 1;
             (*tmp)->t_label = *tid;
-            cur_node->parent->children[cur_node->parent->num_child] = *tmp;
-            (cur_node->parent->num_child)++;
-            check_node_capacity(cur_node->parent);
-            concact_and_print(*tmp);
+
+
+            Node *p = cur_node->parent;
+            if (p) {
+                p->children[p->num_child] = *tmp;
+                (p->num_child)++;
+                check_node_capacity(p);
+            }
+
+            //concact_and_print(*tmp);
             *tmp = build_basic_node_with_list();
             (*tmp)->children[(*tmp)->num_child] = cur_node;
             (*tmp)->num_child ++;
@@ -115,16 +124,19 @@ void pre_tokenise(Node* root){
 
         // Current character is punctuation
         }else{
+
             if(sequence_length == 1){
                 root->children[root->num_child] = tmp->children[0];
                 root->num_child ++;
                 check_node_capacity(root);
                 tmp->num_child = 0;
                 tmp->children[0] = NULL;
+                free((tmp)->children);
                 free_tree(tmp);
             } else if (sequence_length == 0 ) {
                 tmp->num_child = 0;
                 tmp->children[0] = NULL;
+                free((tmp)->children);
                 free_tree(tmp);
             }
             root->children[root->num_child] = cur_node;
@@ -141,6 +153,7 @@ void pre_tokenise(Node* root){
         check_node_capacity(root);
         tmp->num_child = 0;
         tmp->children[0] = NULL;
+        free((tmp)->children);
         free_tree(tmp);
     } else {
         root->children[root->num_child] = tmp;
