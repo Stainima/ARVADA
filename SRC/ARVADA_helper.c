@@ -145,6 +145,7 @@ void pre_tokenise(Node* root){
     } else {
         root->children[root->num_child] = tmp;
         root->num_child ++;
+        tmp->parent = root;
         check_node_capacity(root);
     }
     free(cur_children);
