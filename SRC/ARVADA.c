@@ -90,14 +90,17 @@ int main (int argc, char **argv){
      // --------------------------- Finsih building all the naive parse trees ------//
 
      // Pre-tokenise
-     concact_and_print(root_trees->rootNodes[0]);
-     pre_tokenise(root_trees->rootNodes[0]);
-     concact_and_print(root_trees->rootNodes[0]);
-     concact_and_print_with_lvl(root_trees->rootNodes[0]);
+     for (int i = 0; i < root_trees->count; i ++){
+         pre_tokenise(root_trees->rootNodes[i]);
+         concact_and_print_with_lvl(root_trees->rootNodes[i]);
+     }
 
-//     for( int i = 0; i < root_trees -> count; i++){
-//         merge_all_valid(root_trees->rootNodes[i]);
-//    }
+     // ----------------------------MERGEALLVALID----------------------------------//
+
+     //     for( int i = 0; i < root_trees -> count; i++){
+     //         merge_all_valid(root_trees->rootNodes[i]);
+     //    }
+
 
      // ---------------------------------------------------------------------------//
      // Straring the main while loop

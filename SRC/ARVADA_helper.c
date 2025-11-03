@@ -105,7 +105,7 @@ void pre_tokenise(Node* root){
     for( int i = 0; i < cur_children_num; i++){
 
         Node * cur_node= cur_children[i];
-        printf("node char: %c.\n", cur_node->character);
+        //printf("node char: %c.\n", cur_node->character);
         // Current character is a whiteSpace
         if(cur_node->character == ' '){
             check_and_tokenise(1, &sequence_length, &sequence_begun, &tmp, cur_node);
