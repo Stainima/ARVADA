@@ -155,7 +155,9 @@ void pre_tokenise(Node* root){
         tmp->children[0] = NULL;
         free((tmp)->children);
         free_tree(tmp);
-    } else {
+    }else if(sequence_length == 0){
+        free_tree(tmp);
+    } else  {
         root->children[root->num_child] = tmp;
         root->num_child ++;
         tmp->parent = root;

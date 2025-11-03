@@ -29,9 +29,11 @@ void concatenate_with_levels(Node *root, char** buffer, int lvl){
         new_space[len + 1] = root->character;
         new_space[len + 2] = '\0';
         *buffer = new_space;
+        printf("Char: %c.\n", root->character);
         return;
     }
 
+    printf("Labels: %d.\n", root->t_label);
     for( int i = 0; i < root->num_child; i++){
         concatenate_with_levels(root->children[i], buffer, lvl + 1);
 

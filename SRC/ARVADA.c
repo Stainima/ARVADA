@@ -91,7 +91,7 @@ int main (int argc, char **argv){
 
      // Step 2: Toggeling pre-tokenisation
      // Section III-E of Original paper
-     int tokenise = 0;
+     int tokenise = 1;
 
      if(tokenise){
         for (int i = 0; i < root_trees->count; i ++){
