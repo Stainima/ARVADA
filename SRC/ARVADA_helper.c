@@ -1,7 +1,154 @@
 #include "ARVADA.h"
+#include <ctype.h>
+#include <stdio.h>
 
 //---------------------------------------
 
+
+void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun, Node **tmp, Node *cur_node){
+
+    // A sequence of the same class as currnet node is in progress.
+    if (*sequence_begun == cur_class && *sequence_length > 0){
+
+        // Because the parent of the first child is never assigned,
+        // this is done to deal with cases where a sequence of just
+        // length 1 is found.
+        if(*sequence_length == 1){
+            (*tmp)->children[0]->parent = *tmp;
+        }
+
+        // Assigning the current node to tmp,
+        // increase sequence number.
+        cur_node->parent = *tmp;
+        (*tmp)->children[(*tmp)->num_child]= cur_node;
+        (*tmp)->num_child ++;
+        check_node_capacity(*tmp);
+        (*sequence_length)++;
+
+    // no sequence or a different sequence has begun
+    }else{
+
+        // different sequence of length 1 is in progress.
+        if(*sequence_length == 1){
+            printf("here: %c\n.", cur_node->character);
+            cur_node->parent->children[cur_node->parent->num_child] = (*tmp)->children[0];
+            (cur_node->parent->num_child)++;
+            check_node_capacity(cur_node->parent);
+            (*tmp)->num_child = 0;
+            (*tmp)->children[0] = NULL;
+            free_tree(*tmp);
+            *tmp= build_basic_node_with_list();
+            (*tmp)->children[(*tmp)->num_child] = cur_node;
+            (*tmp)->num_child ++;
+            check_node_capacity(*tmp);
+
+        // different sequence of length greater than 1 has begun.
+        }else if(*sequence_length > 1){
+            // Assign parent of tmp as we are now about to
+            // finalise the sequence in progress
+            (*tmp)->parent = (*tmp)->children[0]->parent;
+            *tid = *tid + 1;
+            (*tmp)->t_label = *tid;
+            cur_node->parent->children[cur_node->parent->num_child] = *tmp;
+            (cur_node->parent->num_child)++;
+            check_node_capacity(cur_node->parent);
+            concact_and_print(*tmp);
+            *tmp = build_basic_node_with_list();
+            (*tmp)->children[(*tmp)->num_child] = cur_node;
+            (*tmp)->num_child ++;
+            check_node_capacity(*tmp);
+            *sequence_length = 1;
+
+        // no sequence in progress, assign this node as first node,
+        // and begin the sequence.
+        }else if(*sequence_begun == 0) {
+            (*tmp)->children[(*tmp)->num_child] = cur_node;
+            (*tmp)->num_child ++;
+            check_node_capacity(*tmp);
+            *sequence_length = 1;
+        }
+    }
+    *sequence_begun = cur_class;
+    //printf("Sequence Begun: %d.\n", *sequence_begun);
+    //printf("sequence_len: %d \n.", *sequence_length);
+}
+
+void pre_tokenise(Node* root){
+
+    // Flags to count contigious seuqences.
+    int sequence_begun = 0;
+    int sequence_length = 0;
+    // class 1 = Whitespaces
+    // class 2 = Uppercase
+    // class 3 = Lowercase
+    // class 4 = Digits
+
+    // Set basic node with a list up.
+    // parent and children of the node assigned in progress.
+    Node *tmp = build_basic_node_with_list();
+    int cur_children_num = root->num_child;
+    Node ** cur_children = root->children;
+    root->capacity = 1;
+    root->num_child = 0;
+    root->children= calloc(root->capacity, sizeof(Node*));
+
+
+    for( int i = 0; i < cur_children_num; i++){
+
+        Node * cur_node= cur_children[i];
+        printf("node char: %c.\n", cur_node->character);
+        // Current character is a whiteSpace
+        if(cur_node->character == ' '){
+            check_and_tokenise(1, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is an uppercase character
+        }else if(isupper(cur_node->character)){
+            check_and_tokenise(2, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is a lower character.
+        }else if(islower(cur_node->character)){
+            check_and_tokenise(3, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is a digit.
+        }else if(isdigit(cur_node->character)){
+            check_and_tokenise(4, &sequence_length, &sequence_begun, &tmp, cur_node);
+
+        // Current character is punctuation
+        }else{
+            if(sequence_length == 1){
+                root->children[root->num_child] = tmp->children[0];
+                root->num_child ++;
+                check_node_capacity(root);
+                tmp->num_child = 0;
+                tmp->children[0] = NULL;
+                free_tree(tmp);
+            } else if (sequence_length == 0 ) {
+                tmp->num_child = 0;
+                tmp->children[0] = NULL;
+                free_tree(tmp);
+            }
+            root->children[root->num_child] = cur_node;
+            root->num_child++;
+            check_node_capacity(root);
+            tmp = build_basic_node_with_list();
+            sequence_begun = 0;
+            sequence_length = 0;
+        }
+    }
+    if(sequence_length == 1){
+        root->children[root->num_child] = tmp->children[0];
+        root->num_child ++;
+        check_node_capacity(root);
+        tmp->num_child = 0;
+        tmp->children[0] = NULL;
+        free_tree(tmp);
+    } else {
+        root->children[root->num_child] = tmp;
+        root->num_child ++;
+        check_node_capacity(root);
+    }
+    free(cur_children);
+}
 
 
 // Function to perform merge all valid from paper
@@ -49,10 +196,10 @@ int validate_merge(Node *node_1, Node *node_2, Node *dup_tree){
     // If any of the replacement is invalid, it will set a var to false
     int *res = calloc(1, sizeof(int));
     *res = 1;
-    replace(node_1, node_2, dup_tree, 0, res);
+    replacement_check(node_1, node_2, dup_tree, 0, res);
 
     if(!(*res)){
-        replace(node_2, node_1, dup_tree, 0, res);
+        replacement_check(node_2, node_1, dup_tree, 0, res);
     }
 
     int cur_res = *res;
@@ -62,7 +209,7 @@ int validate_merge(Node *node_1, Node *node_2, Node *dup_tree){
 
 // Fucntion to perform sampling string for string replacements
 // refer to section III-D, from the original
-void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
+void replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
 
     //if at any point res become 0, stop execution immediately
     if (!(*res)){
@@ -73,7 +220,7 @@ void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
     // as terminal do not have a tid ( implementation diff )
     int terminal_replacee = 0;
 
-    if (replacee->t == -1){
+    if (replacee->t_label == -1){
         terminal_replacee = 1;
     }
 
@@ -85,7 +232,7 @@ void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
 
         Node *cur = dup_tree->children[i];
 
-        // if it is a terminal replaceea and no the correct 1
+        // if it is a terminal replacee and no the correct 1
         // right now. Continue
         if (terminal_replacee){
             if (cur->character != replacee->character){
@@ -95,7 +242,7 @@ void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
 
         // perform the swap.
         dup_tree->children[i] = replacer;
-        replace(replacer, replacee, dup_tree, i + 1, res);
+        replacement_check(replacer, replacee, dup_tree, i + 1, res);
         if(forward){
             // call to oracle then
             // if (call to oracle) -> pass : *res = 0;
@@ -112,8 +259,8 @@ void replace(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
         if(!*res){
             return;
         }
-        contact_and_print(dup_tree);
-        replace(replacer, replacee, dup_tree, i + 1, res);
+        concact_and_print(dup_tree);
+        replacement_check(replacer, replacee, dup_tree, i + 1, res);
 
     }
 

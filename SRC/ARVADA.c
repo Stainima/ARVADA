@@ -1,12 +1,13 @@
 #include "ARVADA.h"
 #include <nl_types.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 // All steps referenced according to Original paper
 
 ////////////////
 // Global var to keep track of tid
-int *tid;
+int *tid ;
 //////////////////////////////////////////////////////////////////////////////
 
 int main (int argc, char **argv){
@@ -29,7 +30,7 @@ int main (int argc, char **argv){
      Nodes *root_trees= malloc(sizeof(Nodes)); // freed
      root_trees->capacity = 4; // randomly assigned
      root_trees->count = 0;
-     root_trees->nodes = malloc(root_trees->capacity * sizeof(Node*)); // freed
+     root_trees->rootNodes= malloc(root_trees->capacity * sizeof(Node*)); // freed
 
      // Getting the file name and reading it in
      char *file_name = *(argv + 1);
@@ -56,7 +57,7 @@ int main (int argc, char **argv){
          // builidng the navie parse tree for each sentence
          Node *current_tree = build_basic_node();
          current_tree->capacity = 10; // randomly assigned
-         current_tree->t = 0;
+         current_tree->t_label = 0;
          current_tree->children = calloc(current_tree->capacity, sizeof(Node*));
 
          for(int i = 0; i < (read_line_len - 1); i ++ ){
@@ -72,7 +73,7 @@ int main (int argc, char **argv){
          }
 
          // Check current capacity of the root nodes
-         root_trees->nodes[root_trees->count] = current_tree;
+         root_trees->rootNodes[root_trees->count] = current_tree;
          root_trees->count = root_trees->count + 1;
          check_nodes_capacity(root_trees);
 
@@ -88,15 +89,20 @@ int main (int argc, char **argv){
 
      // --------------------------- Finsih building all the naive parse trees ------//
 
-     for( int i = 0; i < root_trees -> count; i++){
-         merge_all_valid(root_trees->nodes[i]);
-    }
+     // Pre-tokenise
+     concact_and_print(root_trees->rootNodes[0]);
+     pre_tokenise(root_trees->rootNodes[0]);
+     concact_and_print(root_trees->rootNodes[0]);
+     concact_and_print_with_lvl(root_trees->rootNodes[0]);
 
+//     for( int i = 0; i < root_trees -> count; i++){
+//         merge_all_valid(root_trees->rootNodes[i]);
+//    }
 
      // ---------------------------------------------------------------------------//
      // Straring the main while loop
 
-     int updated = 1;
+    int updated = 1;
     while (updated){
 
         updated = 0;
@@ -108,10 +114,10 @@ int main (int argc, char **argv){
      // feeing every things
      for( int i = 0; i < root_trees-> count; i ++){
 
-         Node *cur_node = root_trees->nodes[i];
+         Node *cur_node = root_trees->rootNodes[i];
          free_tree(cur_node);
      }
-     free(root_trees->nodes);
+     free(root_trees->rootNodes);
      free(root_trees);
      free(tid);
 

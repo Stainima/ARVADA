@@ -10,10 +10,24 @@ Node *build_basic_node(){
     node->parent = NULL;
     node->capacity = 0;
     node->character = '\0';
-    node-> t= -1;
+    node-> t_label= -1;
     node->num_child = 0;
     node->pos = -1;
     node->children = NULL;
+    return node;
+}
+
+// Fucntion to that buids a basic node
+Node *build_basic_node_with_list(){
+
+    Node * node = malloc(sizeof(Node));
+    node->parent = NULL;
+    node->capacity = 1;
+    node->character = '\0';
+    node-> t_label= -2;
+    node->num_child = 0;
+    node->pos = -1;
+    node->children= calloc(node->capacity, sizeof(Node*));
     return node;
 }
 
@@ -27,12 +41,12 @@ void check_nodes_capacity(Nodes *nodes){
     // If number of childern has reached capacity, update cap.
     int cur_cap = nodes->capacity;
     nodes->capacity = (cur_cap + (cur_cap/2) + 1);
-    void *new_space = realloc(nodes->nodes,nodes->capacity * sizeof(Node*));
+    void *new_space = realloc(nodes->rootNodes,nodes->capacity * sizeof(Node*));
     if(errno == ENOMEM || new_space == NULL){
         fprintf(stderr, "Error increasing the capicty of nodes.");
         return;
     }
-    nodes->nodes = new_space;
+    nodes->rootNodes= new_space;
     //printf("Root-Nodes capacity increase successful: %d.\n",nodes->capacity);
 
 }
@@ -63,7 +77,7 @@ void print_all_trees(Nodes *nodes){
     //printf("Number of root trees: %d\n",nodes->count);
 
     for (int i = 0; i < nodes->count; i++){
-        Node *cur = nodes->nodes[i];
+        Node *cur = nodes->rootNodes[i];
         printf("Tree No.%d:",i);
         for(int j = 0; j < cur->num_child; j++){
             printf("%c",cur->children[j]->character);
@@ -94,11 +108,11 @@ Node *duplicate_tree(Node *root){
     dup_root->capacity = root->capacity;
     dup_root->parent = root->parent;
     dup_root->character = root->character;
-    dup_root->t = root->t;
+    dup_root->t_label = root->t_label;
     dup_root->pos = root->pos;
     dup_root->num_child = root->num_child;
 
-    if(root->children == NULL && root->t == -1){
+    if(root->children == NULL && root->t_label == -1){
         return dup_root;
     }
 
