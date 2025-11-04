@@ -107,7 +107,6 @@ int main (int argc, char **argv){
         concact_and_print_with_labels(root_trees->rootNodes[i]);
      }
 
-
      // ---------------------------------------------------------------------------//
      // Straring the main while loop
 

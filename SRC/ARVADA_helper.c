@@ -215,7 +215,7 @@ void merge_all_valid(Node *root){
             char *buffer_tb = calloc(1, sizeof(char));
             concatenate(root->children[j], &buffer_tb);
             if(strcmp(buffer_ta,buffer_tb) == 0){
-                merge_same_node(root->children[i], root->children[j]);
+                merge_same_node(root->children[i], root->children[j], i, j);
                 free(buffer_ta);
                 free(buffer_tb);
                 continue;
@@ -231,10 +231,37 @@ void merge_all_valid(Node *root){
 }
 
 // Special function to handle merging attempting of the same string.
-void merge_same_node(Node *ta, Node *tb){
+void merge_same_node(Node *ta, Node *tb, int i , int j){
 
     // if we are trying to merge 2 leaf nodes,
+    // This is assuming pre-tokenisation.
     if(ta->t_label == -1 || tb->t_label == -1){
+        printf("here: %c\n",ta->character);
+
+        // Create and link the nodes.
+        // Only create the Link node if a link
+        // intermediate node does not exist yet.
+        // This accounts for when there are multiple of the same
+        // leaf node.
+        if(ta->parent->t_label == 0){
+
+            Node *ta_label = build_basic_node_with_list();
+            (*tid)++;
+            ta_label ->t_label = *tid;
+            ta_label->parent = ta->parent;
+            ta_label->children[0] = ta;
+            (ta_label->num_child) ++;
+            (ta->parent)->children[i] = ta_label;
+            ta->parent = ta_label;
+
+        }
+        Node *tb_label = build_basic_node_with_list();
+        tb_label ->t_label = *tid;
+        tb_label->parent = tb->parent;
+        tb_label->children[0] = tb;
+        (tb_label->num_child) ++;
+        (tb->parent)->children[j] = tb_label;
+        tb->parent = tb_label;
         return;
     }
 
