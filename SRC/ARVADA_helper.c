@@ -1,10 +1,12 @@
 #include "ARVADA.h"
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 //---------------------------------------
 
-
+// Pre-tokenisation
 void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun, Node **tmp, Node *cur_node){
 
     // A sequence of the same class as currnet node is in progress.
@@ -176,35 +178,68 @@ void pre_tokenise(Node* root){
 }
 
 
+//---------------------------------------
+
+
 // Function to perform merge all valid from paper
 // section III-A, Algorithm 1 (high level) line 2
 // NOTE CURRENTLY PRE-TOKENIZATION IS OFF
+// No special handling for cases where t_a and t_b are the same
+// with non-pre-tokenisation.
 void merge_all_valid(Node *root){
 
     Node *dup_root = duplicate_tree(root);
     // Go through the list 1 once
     for( int i = 0; i < dup_root->num_child; i++){
 
-        if (dup_root->children[i]->character == ' '){
-            continue;
-        }
         // Go through the list number 2 for perms
         for ( int j = i + 1; j < dup_root->num_child; j++){
 
             Node *tmp = dup_root->children[i];
 
-            // Skip the spaces for now
-            if (dup_root->children[j]->character == ' '){
+            // if both t_a and t_b concatneate to the same string
+            // Skip Auto Merge and skip
+            // Save iterations.
+            char *buffer_ta = calloc(1, sizeof(char));
+            concatenate(dup_root->children[i], &buffer_ta);
+            char *buffer_tb = calloc(1, sizeof(char));
+            concatenate(dup_root->children[j], &buffer_tb);
+            if(strcmp(buffer_ta,buffer_tb) == 0){
+                merge_same_node(root->children[i], root->children[j]);
+                free(buffer_ta);
+                free(buffer_tb);
                 continue;
             }
 
-            merge(tmp, dup_root->children[j], dup_root);
+            free(buffer_ta);
+            free(buffer_tb);
+            //merge(tmp, dup_root->children[j], dup_root);
         }
 
     }
 
     free_tree(dup_root);
 
+}
+
+// Special function to handle merging attempting of the same string.
+void merge_same_node(Node *ta, Node *tb){
+
+    // if we are trying to merge 2 leaf nodes,
+    // skip, node you can just check 1 and it works.
+    if(ta->t_label == -1 || tb->t_label == -1){
+        return;
+    }
+
+    // if 2 non-terminals are given
+    // converge by changing the both t-label to
+    // min (ta->t_label, tb->t__label)
+    if(ta->t_label < tb->t_label){
+        tb->t_label = ta->t_label;
+    } else {
+        ta->t_label = tb->t_label;
+    }
+    return;
 }
 
 //Merge funciton

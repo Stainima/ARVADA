@@ -49,21 +49,29 @@ typedef struct nodes{
     struct node **rootNodes;
 } Nodes;
 
+// ----- From prase tree builder
 Node *build_basic_node();
 Node *build_basic_node_with_list();
 void print_all_trees(Nodes *nodes);
 void check_node_capacity(Node *node);
 void check_nodes_capacity(Nodes *nodes);
-void concatenate(Node *root, char** buffer);
 void free_tree(Node *root);
-void pre_tokenise(Node *root);
 Node *duplicate_tree(Node *root);
+
+
+// ------ From ARVADA helper
+void pre_tokenise(Node *root);
 void merge_all_valid(Node *root);
 int merge(Node *node_1, Node *node_2, Node *dup_tree);
 int validate_merge(Node *node_1, Node *node_2, Node *dup_tree);
 void replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res);
+void merge_same_node(Node *ta, Node *tb);
 int parse_string(const char* input);
+
+// ------- From String Concat
+void concatenate(Node *root, char** buffer);
 void concact_and_print(Node *tree);
 void concact_and_print_with_lvl(Node *tree);
+void concact_and_print_with_labels(Node *tree);
 
 #endif

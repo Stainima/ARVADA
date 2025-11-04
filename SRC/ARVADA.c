@@ -96,15 +96,16 @@ int main (int argc, char **argv){
      if(tokenise){
         for (int i = 0; i < root_trees->count; i ++){
             pre_tokenise(root_trees->rootNodes[i]);
-            concact_and_print_with_lvl(root_trees->rootNodes[i]);
+            //concact_and_print_with_lvl(root_trees->rootNodes[i]);
         }
      }
 
      // ----------------------------MERGEALLVALID----------------------------------//
 
-     //     for( int i = 0; i < root_trees -> count; i++){
-     //         merge_all_valid(root_trees->rootNodes[i]);
-     //    }
+     for( int i = 0; i < root_trees -> count; i++){
+     merge_all_valid(root_trees->rootNodes[i]);
+     }
+     concact_and_print_with_labels(root_trees->rootNodes[0]);
 
 
      // ---------------------------------------------------------------------------//

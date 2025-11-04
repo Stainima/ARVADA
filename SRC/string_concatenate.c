@@ -40,6 +40,25 @@ void concatenate_with_levels(Node *root, char** buffer, int lvl){
     }
 }
 
+void concatenate_with_label(Node *root, char** buffer){
+
+    if(root->t_label == -1){
+        size_t len = strlen(*buffer);
+        char *new_space = realloc(*buffer, (len + 2) * sizeof(char));
+        new_space[len + 0] = root->character;
+        new_space[len + 1] = '\0';
+        *buffer = new_space;
+        printf("Char: %c.\n", root->character);
+        return;
+    }
+
+    printf("Labels: %d.\n", root->t_label);
+    for( int i = 0; i < root->num_child; i++){
+        concatenate_with_label(root->children[i], buffer);
+
+    }
+}
+
 // Fucntion to concat and print
 void concact_and_print(Node *tree){
 
@@ -54,6 +73,15 @@ void concact_and_print_with_lvl(Node *tree){
 
     char *buffer = calloc(1, sizeof(char));
     concatenate_with_levels(tree, &buffer, 0);
+    printf("Printing buffer: %s.\n",buffer);
+    free(buffer);
+}
+
+// Fucntion to concat and print
+void concact_and_print_with_labels(Node *tree){
+
+    char *buffer = calloc(1, sizeof(char));
+    concatenate_with_label(tree, &buffer);
     printf("Printing buffer: %s.\n",buffer);
     free(buffer);
 }
