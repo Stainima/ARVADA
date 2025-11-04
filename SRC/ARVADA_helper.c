@@ -172,6 +172,8 @@ void pre_tokenise(Node* root){
         root->children[root->num_child] = tmp;
         root->num_child ++;
         tmp->parent = root;
+        (*tid) ++;
+        tmp->t_label = *tid;
         check_node_capacity(root);
     }
     free(cur_children);
@@ -188,22 +190,30 @@ void pre_tokenise(Node* root){
 // with non-pre-tokenisation.
 void merge_all_valid(Node *root){
 
-    Node *dup_root = duplicate_tree(root);
     // Go through the list 1 once
-    for( int i = 0; i < dup_root->num_child; i++){
+    for( int i = 0; i < root->num_child; i++){
+
+        // Skip White spaces
+        if(root->children[i]->character == ' '){
+            continue;
+        }
 
         // Go through the list number 2 for perms
-        for ( int j = i + 1; j < dup_root->num_child; j++){
+        for ( int j = i + 1; j < root->num_child; j++){
 
-            Node *tmp = dup_root->children[i];
+            // Skip White spaces
+            if(root->children[j]->character == ' '){
+                continue;
+            }
+
+            Node *tmp = root->children[i];
 
             // if both t_a and t_b concatneate to the same string
-            // Skip Auto Merge and skip
-            // Save iterations.
+            // Merge (change labels ) if they are non-terminals or non-white space.
             char *buffer_ta = calloc(1, sizeof(char));
-            concatenate(dup_root->children[i], &buffer_ta);
+            concatenate(root->children[i], &buffer_ta);
             char *buffer_tb = calloc(1, sizeof(char));
-            concatenate(dup_root->children[j], &buffer_tb);
+            concatenate(root->children[j], &buffer_tb);
             if(strcmp(buffer_ta,buffer_tb) == 0){
                 merge_same_node(root->children[i], root->children[j]);
                 free(buffer_ta);
@@ -218,15 +228,12 @@ void merge_all_valid(Node *root){
 
     }
 
-    free_tree(dup_root);
-
 }
 
 // Special function to handle merging attempting of the same string.
 void merge_same_node(Node *ta, Node *tb){
 
     // if we are trying to merge 2 leaf nodes,
-    // skip, node you can just check 1 and it works.
     if(ta->t_label == -1 || tb->t_label == -1){
         return;
     }

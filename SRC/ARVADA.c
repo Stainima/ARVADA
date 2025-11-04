@@ -103,9 +103,9 @@ int main (int argc, char **argv){
      // ----------------------------MERGEALLVALID----------------------------------//
 
      for( int i = 0; i < root_trees -> count; i++){
-     merge_all_valid(root_trees->rootNodes[i]);
+        merge_all_valid(root_trees->rootNodes[i]);
+        concact_and_print_with_labels(root_trees->rootNodes[i]);
      }
-     concact_and_print_with_labels(root_trees->rootNodes[0]);
 
 
      // ---------------------------------------------------------------------------//
