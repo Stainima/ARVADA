@@ -101,9 +101,11 @@ int main (int argc, char **argv){
 
      // ----------------------------MERGEALLVALID----------------------------------//
 
+     // Step 3: MERGEALLVALID
+     // Section III-A of Original paper
      for( int i = 0; i < root_trees -> count; i++){
         merge_all_valid(root_trees->rootNodes[i], root_trees);
-        //concact_and_print_with_labels(root_trees->rootNodes[i]);
+        concact_and_print_with_labels(root_trees->rootNodes[i]);
      }
 
      // ---------------------------------------------------------------------------//

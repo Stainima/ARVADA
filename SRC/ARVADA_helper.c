@@ -1,8 +1,9 @@
 #include "ARVADA.h"
+#include <stdio.h>
 
 //---------------------------------------
 
-// Pre-tokenisation
+// Pre-tokenisation helper function
 void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun, Node **tmp, Node *cur_node){
 
     // A sequence of the same class as currnet node is in progress.
@@ -80,6 +81,7 @@ void check_and_tokenise(int cur_class, int *sequence_length, int *sequence_begun
     //printf("sequence_len: %d \n.", *sequence_length);
 }
 
+// Pre-tokenise
 void pre_tokenise(Node* root){
 
     // Flags to count contigious seuqences.
@@ -221,15 +223,46 @@ void merge_all_valid(Node *root, Nodes *all_trees){
             free(buffer_ta);
             free(buffer_tb);
 
+
+        }
+
+    }
+
+    for( int i = 0; i < root->num_child; i++){
+
+        // Skip White spaces
+        if(root->children[i]->character == ' '){
+            continue;
+        }
+
+        // Go through the list number 2 for perms
+        for ( int j = i + 1; j < root->num_child; j++){
+
+            // Skip White spaces
+            if(root->children[j]->character == ' '){
+                continue;
+            }
+
+            // If 2 nodes have the same non-negative label
+            // means the node has already been merged. Skip.
+            if((root->children[i]->t_label == root->children[j]->t_label) && (root->children[i]->t_label > -1)){
+                continue;
+            }
             // t_a and t_b concatenate to different strings.
             // Now perform a more extensive checl
             int *res = calloc(1, sizeof(int));
             *res = 1;
             basic_replacement_check(root->children[i], root->children[j], all_trees, res);
-            basic_replacement_check(root->children[j], root->children[i], all_trees, res);
-            printf("Here: %d.\n", *res);
+            if( *res ){
+                basic_replacement_check(root->children[j], root->children[i], all_trees, res);
+            }
+
+            if(*res){
+                merge(root->children[i], root->children[j], root, i, j);
+            }
 
             free(res);
+
 
         }
 
@@ -288,10 +321,46 @@ void merge_same_node(Node *ta, Node *tb, int i , int j, Node *root){
     return;
 }
 
+// Merge given 2 nodes
+void merge(Node *node_1, Node *node_2, Node *root, int i, int j){
+
+
+    // Add an intermediate node to the leaf nodes.
+    if(node_1->t_label == -1){
+        Node *inter_node= build_basic_node_with_list();
+        (*tid)++;
+        inter_node->t_label = *tid;
+        inter_node->parent = node_1->parent;
+        inter_node->children[0] = node_1;
+        (inter_node->num_child) ++;
+        root->children[i] = inter_node;
+        node_1->parent = inter_node;
+        node_1 = node_1->parent;
+    }
+
+
+    if(node_2->t_label == - 1){
+        Node *inter_node= build_basic_node_with_list();
+        (*tid)++;
+        inter_node->t_label = *tid;
+        inter_node->parent = node_2->parent;
+        inter_node->children[0] = node_2;
+        (inter_node->num_child) ++;
+        root->children[j] = inter_node;
+        node_2->parent = inter_node;
+        node_2 = node_2->parent;
+    }
+
+    if(node_1->t_label < node_2->t_label){
+        node_2->t_label = node_1->t_label;
+    } else{
+        node_1->t_label = node_2->t_label;
+    }
+}
 
 //Merge funciton
 // Reference to seciton III-C of the original paper
-int merge(Node *node_1, Node *node_2, Node *dup_tree){
+int merge2(Node *node_1, Node *node_2, Node *dup_tree){
 
     int attempted_merge = validate_merge(node_1, node_2, dup_tree);
     return attempted_merge;

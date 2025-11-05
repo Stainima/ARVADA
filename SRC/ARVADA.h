@@ -62,7 +62,7 @@ Node *duplicate_tree(Node *root);
 // ------ From ARVADA helper
 void pre_tokenise(Node *root);
 void merge_all_valid(Node *root, Nodes *all_trees);
-int merge(Node *node_1, Node *node_2, Node *dup_tree);
+void merge(Node *node_1, Node *node_2, Node *dup_tree, int i, int j);
 int validate_merge(Node *node_1, Node *node_2, Node *dup_tree);
 void merge_same_node(Node *ta, Node *tb, int i, int j, Node* root);
 int parse_string(const char* input);
