@@ -1,8 +1,4 @@
 #include "ARVADA.h"
-#include <ctype.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
 //---------------------------------------
 
@@ -216,7 +212,7 @@ void merge_all_valid(Node *root, Nodes *all_trees){
             // Merge (change labels ) if they are non-terminals or non-white space.
             if(strcmp(buffer_ta,buffer_tb) == 0){
                 merge_same_node(root->children[i], root->children[j], i, j, root);
-                printf("Comp: %s, %d\n", buffer_ta, root->children[i]->t_label);
+                //printf("Comp: %s, %d\n", buffer_ta, root->children[i]->t_label);
                 free(buffer_ta);
                 free(buffer_tb);
                 continue;
@@ -229,7 +225,9 @@ void merge_all_valid(Node *root, Nodes *all_trees){
             // Now perform a more extensive checl
             int *res = calloc(1, sizeof(int));
             *res = 1;
-            //basic_replacement_check(root->children[i], root->children[j], all_trees, res);
+            basic_replacement_check(root->children[i], root->children[j], all_trees, res);
+            basic_replacement_check(root->children[j], root->children[i], all_trees, res);
+            printf("Here: %d.\n", *res);
 
             free(res);
 
@@ -291,41 +289,6 @@ void merge_same_node(Node *ta, Node *tb, int i , int j, Node *root){
 }
 
 
-// Froming a basic replacement check,
-// replace all instance of t_a with t_b in all trees
-// check if the all concatenate to a valid string (oracle)
-// do the vise-verse
-void basic_replacement_check(Node *ta, Node *tb, Nodes *all_trees, int *res){
-
-    // Concatenate to get the stringstring
-    char *buffer_ta = calloc(1, sizeof(char));
-    concatenate(ta, &buffer_ta);
-    char *buffer_tb = calloc(1, sizeof(char));
-    concatenate(tb,  &buffer_tb);
-
-    // loop through all trees.
-    for( int i = 0; i < all_trees->count; i++){
-
-        // duplicate tree
-        Node *dup_tree = duplicate_tree(all_trees->rootNodes[i]);
-
-        // loop through duplicate tree children node
-        for (int j = 0; j < dup_tree->num_child; j++){
-
-            // get current children nodes string.
-            char *buffer_tc = calloc(1, sizeof(char));
-            concatenate(dup_tree->children[j], &buffer_tc);
-
-            if(strcmp(buffer_tb, buffer_tc) ==0){
-            }
-            free(buffer_tc);
-        }
-    }
-
-    free(buffer_ta);
-    free(buffer_tb);
-}
-
 //Merge funciton
 // Reference to seciton III-C of the original paper
 int merge(Node *node_1, Node *node_2, Node *dup_tree){
@@ -352,65 +315,6 @@ int validate_merge(Node *node_1, Node *node_2, Node *dup_tree){
 }
 
 
-// Fucntion to perform sampling string for string replacements
-// refer to section III-D, from the original
-void advanced_replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
-
-    //if at any point res become 0, stop execution immediately
-    if (!(*res)){
-        return;
-    }
-
-    // Check if you are replacing single char so you can compare char
-    // as terminal do not have a tid ( implementation diff )
-    int terminal_replacee = 0;
-
-    if (replacee->t_label == -1){
-        terminal_replacee = 1;
-    }
-
-    // Flags to redue calls to the oracle
-    int forward = 1;
-
-    // Looping through all the nodes in t0
-    for ( int i = pos; i < dup_tree->num_child;  i++){
-
-        Node *cur = dup_tree->children[i];
-
-        // if it is a terminal replacee and no the correct 1
-        // right now. Continue
-        if (terminal_replacee){
-            if (cur->character != replacee->character){
-                continue;
-            }
-        }
-
-        // perform the swap.
-        dup_tree->children[i] = replacer;
-        advanced_replacement_check(replacer, replacee, dup_tree, i + 1, res);
-        if(forward){
-            // call to oracle then
-            // if (call to oracle) -> pass : *res = 0;
-            char *buffer = calloc(1, sizeof(char));
-            concatenate(dup_tree, &buffer);
-            *res = parse_string(buffer);
-            printf("Printing buffer: %s and %d.\n",buffer, *res);
-            free(buffer);
-            forward = 0;
-
-        }
-        dup_tree->children[i] = cur;
-        // case where 1 of the candidate string is invalid, so return.
-        if(!*res){
-            return;
-        }
-        concact_and_print(dup_tree);
-        advanced_replacement_check(replacer, replacee, dup_tree, i + 1, res);
-
-    }
-
-    *res = 1;
-}
 
 // The Oracle call sand return
 int parse_string(const char *input) {
