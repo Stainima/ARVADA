@@ -188,7 +188,7 @@ void pre_tokenise(Node* root){
 // NOTE CURRENTLY PRE-TOKENIZATION IS OFF
 // No special handling for cases where t_a and t_b are the same
 // with non-pre-tokenisation.
-void merge_all_valid(Node *root){
+void merge_all_valid(Node *root, Nodes *all_trees){
 
     // Go through the list 1 once
     for( int i = 0; i < root->num_child; i++){
@@ -206,16 +206,17 @@ void merge_all_valid(Node *root){
                 continue;
             }
 
-            Node *tmp = root->children[i];
-
-            // if both t_a and t_b concatneate to the same string
-            // Merge (change labels ) if they are non-terminals or non-white space.
+            // concatenate ta and tb to get strings
             char *buffer_ta = calloc(1, sizeof(char));
             concatenate(root->children[i], &buffer_ta);
             char *buffer_tb = calloc(1, sizeof(char));
             concatenate(root->children[j], &buffer_tb);
+
+            // if both t_a and t_b concatneate to the same string
+            // Merge (change labels ) if they are non-terminals or non-white space.
             if(strcmp(buffer_ta,buffer_tb) == 0){
-                merge_same_node(root->children[i], root->children[j], i, j);
+                merge_same_node(root->children[i], root->children[j], i, j, root);
+                printf("Comp: %s, %d\n", buffer_ta, root->children[i]->t_label);
                 free(buffer_ta);
                 free(buffer_tb);
                 continue;
@@ -223,7 +224,15 @@ void merge_all_valid(Node *root){
 
             free(buffer_ta);
             free(buffer_tb);
-            //merge(tmp, dup_root->children[j], dup_root);
+
+            // t_a and t_b concatenate to different strings.
+            // Now perform a more extensive checl
+            int *res = calloc(1, sizeof(int));
+            *res = 1;
+            //basic_replacement_check(root->children[i], root->children[j], all_trees, res);
+
+            free(res);
+
         }
 
     }
@@ -231,19 +240,25 @@ void merge_all_valid(Node *root){
 }
 
 // Special function to handle merging attempting of the same string.
-void merge_same_node(Node *ta, Node *tb, int i , int j){
+void merge_same_node(Node *ta, Node *tb, int i , int j, Node *root){
+
+    // Check the labels have already been merge
+    // cases where theere are 3 of the same kind
+    if((ta->t_label == tb->t_label) && (ta->t_label > 0)){
+        return;
+    }
 
     // if we are trying to merge 2 leaf nodes,
     // This is assuming pre-tokenisation.
     if(ta->t_label == -1 || tb->t_label == -1){
-        printf("here: %c\n",ta->character);
 
         // Create and link the nodes.
         // Only create the Link node if a link
         // intermediate node does not exist yet.
         // This accounts for when there are multiple of the same
         // leaf node.
-        if(ta->parent->t_label == 0){
+        //printf("parent: %d, %d, %d\n", ta->parent->t_label, ta->parent->children[i]->t_label, i);
+        if(root->children[i]->t_label == -1){
 
             Node *ta_label = build_basic_node_with_list();
             (*tid)++;
@@ -251,16 +266,15 @@ void merge_same_node(Node *ta, Node *tb, int i , int j){
             ta_label->parent = ta->parent;
             ta_label->children[0] = ta;
             (ta_label->num_child) ++;
-            (ta->parent)->children[i] = ta_label;
+            root->children[i] = ta_label;
             ta->parent = ta_label;
-
         }
         Node *tb_label = build_basic_node_with_list();
         tb_label ->t_label = *tid;
         tb_label->parent = tb->parent;
         tb_label->children[0] = tb;
         (tb_label->num_child) ++;
-        (tb->parent)->children[j] = tb_label;
+        root->children[j] = tb_label;
         tb->parent = tb_label;
         return;
     }
@@ -274,6 +288,42 @@ void merge_same_node(Node *ta, Node *tb, int i , int j){
         ta->t_label = tb->t_label;
     }
     return;
+}
+
+
+// Froming a basic replacement check,
+// replace all instance of t_a with t_b in all trees
+// check if the all concatenate to a valid string (oracle)
+// do the vise-verse
+void basic_replacement_check(Node *ta, Node *tb, Nodes *all_trees, int *res){
+
+    // Concatenate to get the stringstring
+    char *buffer_ta = calloc(1, sizeof(char));
+    concatenate(ta, &buffer_ta);
+    char *buffer_tb = calloc(1, sizeof(char));
+    concatenate(tb,  &buffer_tb);
+
+    // loop through all trees.
+    for( int i = 0; i < all_trees->count; i++){
+
+        // duplicate tree
+        Node *dup_tree = duplicate_tree(all_trees->rootNodes[i]);
+
+        // loop through duplicate tree children node
+        for (int j = 0; j < dup_tree->num_child; j++){
+
+            // get current children nodes string.
+            char *buffer_tc = calloc(1, sizeof(char));
+            concatenate(dup_tree->children[j], &buffer_tc);
+
+            if(strcmp(buffer_tb, buffer_tc) ==0){
+            }
+            free(buffer_tc);
+        }
+    }
+
+    free(buffer_ta);
+    free(buffer_tb);
 }
 
 //Merge funciton
@@ -290,10 +340,10 @@ int validate_merge(Node *node_1, Node *node_2, Node *dup_tree){
     // If any of the replacement is invalid, it will set a var to false
     int *res = calloc(1, sizeof(int));
     *res = 1;
-    replacement_check(node_1, node_2, dup_tree, 0, res);
+    advanced_replacement_check(node_1, node_2, dup_tree, 0, res);
 
     if(!(*res)){
-        replacement_check(node_2, node_1, dup_tree, 0, res);
+        advanced_replacement_check(node_2, node_1, dup_tree, 0, res);
     }
 
     int cur_res = *res;
@@ -301,9 +351,10 @@ int validate_merge(Node *node_1, Node *node_2, Node *dup_tree){
     return cur_res;
 }
 
+
 // Fucntion to perform sampling string for string replacements
 // refer to section III-D, from the original
-void replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
+void advanced_replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, int *res){
 
     //if at any point res become 0, stop execution immediately
     if (!(*res)){
@@ -336,7 +387,7 @@ void replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, 
 
         // perform the swap.
         dup_tree->children[i] = replacer;
-        replacement_check(replacer, replacee, dup_tree, i + 1, res);
+        advanced_replacement_check(replacer, replacee, dup_tree, i + 1, res);
         if(forward){
             // call to oracle then
             // if (call to oracle) -> pass : *res = 0;
@@ -354,7 +405,7 @@ void replacement_check(Node *replacer, Node *replacee, Node *dup_tree, int pos, 
             return;
         }
         concact_and_print(dup_tree);
-        replacement_check(replacer, replacee, dup_tree, i + 1, res);
+        advanced_replacement_check(replacer, replacee, dup_tree, i + 1, res);
 
     }
 
